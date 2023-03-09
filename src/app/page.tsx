@@ -5,8 +5,6 @@ import { Tags } from "@/components";
 export default async function Home() {
   const postList = await getPostList();
 
-  console.log(postList[0]);
-
   return (
     <section>
       <h1 className="font-bold text-3xl font-serif mb-5">Blog</h1>
@@ -27,6 +25,7 @@ export default async function Home() {
               <p className="font-bold">{post.title}</p>
               <p className="text-sm line-clamp-2">{post.description}</p>
               <Tags tags={post.tags} />
+              <p className="font-bold text-sm">{"(繼續閱讀...)"}</p>
             </div>
           </Link>
         ))}
