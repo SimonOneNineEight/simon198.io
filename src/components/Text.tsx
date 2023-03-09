@@ -22,7 +22,9 @@ const Text = ({ richTextArray, textClass }: IText) => {
             className={[
               textClass && textClass,
               bold ? "font-bold" : "",
-              code ? "rounded bg-gray-700 px-1 py-1 font-mono" : "",
+              code
+                ? "rounded dark:bg-gray-700 bg-gray-300 px-1 py-1 font-mono"
+                : "",
               italic ? "italic" : "",
               strikethrough ? "line-through" : "",
               underline ? "underline" : "",
