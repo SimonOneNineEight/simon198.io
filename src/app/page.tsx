@@ -14,7 +14,7 @@ export default async function Home() {
             href={`/blog/${post.slug}`}
           >
             <div className="w-full flex flex-col">
-              <p className="font-bold">{post.title}</p>
+              <p className="font-bold text-xl">{post.title}</p>
               <p className="text-sm line-clamp-2">{post.description}</p>
               {post.tags && <Tags tags={post.tags} />}
               <p className="font-bold text-sm">{"(繼續閱讀...)"}</p>
