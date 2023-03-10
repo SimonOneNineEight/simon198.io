@@ -2,9 +2,9 @@ import { Fragment } from "react";
 import Balancer from "react-wrap-balancer";
 import dayjs from "dayjs";
 
-import { getPage, getBlocks } from "@/lib/notion";
-import { renderBlock } from "@/utils";
+import { allPosts } from "contentlayer/generated";
 import { Tags } from "@/components";
+import { Mdx } from "@/components/Mdx";
 
 interface Props {
   params: {
@@ -15,24 +15,23 @@ interface Props {
 const Blog = async ({ params }: Props) => {
   const pageId = params.slug;
 
-  const page = await getPage(pageId);
-  const blocks = await getBlocks(pageId);
+  const post = allPosts.find((post) => post.slug === pageId);
+
+  if (!post) return <div>Not found</div>;
 
   return (
-    <section>
+    <section className="prose dark:prose-invert">
       <h1 className="font-bold text-3xl font-serif max-w-[650px]">
-        <Balancer>{page.title}</Balancer>
+        <Balancer>{post.title}</Balancer>
       </h1>
       <div className="grid grid-cols-[auto_1fr_auto] items-center mt-4 mb-8 font-mono text-sm max-w-[650px]">
         <div className="bg-neutral-100 dark:bg-neutral-800 rounded-md px-2 py-1 tracking-tighter">
-          {dayjs(page.created_time).format("YYYY-MM-DD")}
+          {dayjs(post.date).format("YYYY-MM-DD")}
         </div>
         <div className="h-[0.2em] bg-neutral-50 dark:bg-neutral-800 mx-2" />
-        <Tags tags={page.tags} />
+        {post.tags && <Tags tags={post.tags} />}
       </div>
-      {blocks.map((block, index) => {
-        return <Fragment key={index}>{renderBlock(block)}</Fragment>;
-      })}
+      <Mdx code={post.body.code} />
     </section>
   );
 };
