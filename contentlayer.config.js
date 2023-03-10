@@ -6,7 +6,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
 export const Post = defineDocumentType(() => ({
   name: "Post",
-  filePathPattern: `data/posts/**/*.mdx`,
+  filePathPattern: `data/posts/*.mdx`,
   contentType: "mdx",
   fields: {
     title: {
@@ -23,7 +23,7 @@ export const Post = defineDocumentType(() => ({
     },
     publishedAt: {
       type: "date",
-      required: true,
+      required: false,
     },
     tags: {
       type: "list",

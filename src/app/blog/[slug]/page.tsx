@@ -4,11 +4,18 @@ import dayjs from "dayjs";
 import { allPosts } from "contentlayer/generated";
 import { Tags } from "@/components";
 import { Mdx } from "@/components/Mdx";
+import { sortedPost } from "@/lib/contentlayer";
 
 interface Props {
   params: {
     slug: string;
   };
+}
+
+export async function generateStaticParams() {
+  return sortedPost.map((post) => ({
+    slug: post.slug,
+  }));
 }
 
 const Blog = async ({ params }: Props) => {
