@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import Balancer from "react-wrap-balancer";
 import dayjs from "dayjs";
 
@@ -26,7 +25,7 @@ const Blog = async ({ params }: Props) => {
       </h1>
       <div className="grid grid-cols-[auto_1fr_auto] items-center mt-4 mb-8 font-mono text-sm max-w-[650px]">
         <div className="bg-neutral-100 dark:bg-neutral-800 rounded-md px-2 py-1 tracking-tighter">
-          {dayjs(post.date).format("YYYY-MM-DD")}
+          {dayjs(post.publishedAt).format("YYYY-MM-DD")}
         </div>
         <div className="h-[0.2em] bg-neutral-50 dark:bg-neutral-800 mx-2" />
         {post.tags && <Tags tags={post.tags} />}
