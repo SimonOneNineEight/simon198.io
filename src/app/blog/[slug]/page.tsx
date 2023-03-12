@@ -1,7 +1,7 @@
 import Balancer from "react-wrap-balancer";
 import dayjs from "dayjs";
+import Link from "next/link";
 
-import { allPosts } from "contentlayer/generated";
 import { Tags } from "@/components";
 import { Mdx } from "@/components/Mdx";
 import { sortedPost } from "@/lib/contentlayer";
@@ -21,7 +21,10 @@ export async function generateStaticParams() {
 const Blog = async ({ params }: Props) => {
   const pageId = params.slug;
 
-  const post = allPosts.find((post) => post.slug === pageId);
+  const postIndex = sortedPost.findIndex((post) => post.slug === pageId);
+
+  const post = sortedPost[postIndex];
+  const nextPost = sortedPost[postIndex - 1];
 
   if (!post) return <div>Not found</div>;
 
@@ -38,6 +41,17 @@ const Blog = async ({ params }: Props) => {
         {post.tags && <Tags tags={post.tags} />}
       </div>
       <Mdx code={post.body.code} />
+      <div className="h-[0.2em] bg-neutral-50 dark:bg-neutral-800 mx-2" />
+      {nextPost ? (
+        <Link
+          href={`/blog/${nextPost.slug}`}
+          className="bold flex justify-end mt-4"
+        >
+          下一篇：{nextPost.title}
+        </Link>
+      ) : (
+        ""
+      )}
     </section>
   );
 };
