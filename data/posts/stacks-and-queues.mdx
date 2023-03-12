@@ -1,0 +1,67 @@
+---
+type: Post
+title: "[Algorithm] Day.4 堆疊和佇列 (Stacks and Queues)"
+description: "在寫程式的時候，最常使用到的資料結構之一就是一個線性的陣列，而佇列和堆疊就是兩個非常基本的資料結構。"
+slug: "stacks-and-queues"
+publishedAt: 2023-03-12
+tags:
+  - algorithm
+  - note
+---
+
+在寫程式的時候，最常使用到的資料結構之一就是一個線性的陣列，而佇列和堆疊就是兩個非常基本的資料結構。
+
+## 堆疊（Stacks）
+
+堆疊是指執行順序為後進先出（Last-In-Frist-Out, LIFO) 的資料結構。實際操作起來的核心概念是只會在堆疊的最頂端進行操作，舉例來說如果今天依序在堆疊中加入 `A, B, C, D, E` 五個元素，那最先被移出堆疊的元素將會是 **E**。
+
+常見的應用場景包括瀏覽器的返回功能，以及編譯器編譯時的臨時記憶體。
+
+## 佇列（Queue）
+
+佇列則是類似排隊的先進先出（First-In-First-Out, FIFO）的資料結構，他的規則是只能在佇列的最後面插入和只能在最前面進行刪除。舉例來說如果今天依序在佇列中加入 `A, B, C, D, E` 五個元素，那最先被移出堆疊的元素將會是 **A**。
+
+常見的應用場景包括操作系統中的作業佇列，以及網絡中的數據包傳輸。
+
+### 循環佇列 (Circular Queue)
+
+那現在我們來講一個比較特別一點的佇列吧！
+
+Circular Queue（循環佇列）是一種特殊的佇列，與普通的佇列不同，它的佇列結構是環形的，即在一定的容量限制下，當佇列的尾指針到達了佇列的最後一個位置時，就會繞回到佇列的開頭，形成一個循環，從而可以有效地利用佇列的存儲空間。
+
+與普通佇列相比，循環佇列的主要優勢在於，當佇列已滿時，可以覆蓋之前插入的元素，從而實現新的插入操作。這在某些應用場景中很有用，例如在一個固定大小的緩存中，當緩存已滿時，需要覆蓋最早插入的元素。
+
+循環佇列的實現可以使用數組或鏈表等數據結構，其基本操作包括：入佇列（enqueue）、出佇列（dequeue）、查看佇列頭元素（front）、查看佇列尾元素（rear）等。其中，入佇列和出佇列的時間複雜度均為 O(1)，因此循環佇列是一種高效的佇列實現方式。
+
+<Image src={"/images/circular-queue.png"} alt="Circular Queue" />
+
+```
+// 刪除循環佇列 q 中的元素，front 指向第一個元素而 rear 指向最後一個元素
+Algorithm DeleteQ(item) {
+  if(front = rear) then {
+    write "Queue is empty!"; //因為繞一圈，所以如果頭尾相同的話就等於他是空的
+    return false;
+  } else {
+    front = (front + 1) % q.size; // 把 front 的指針往後移一個位置(e.g. 0 -> 1)
+    q[front] = none; // 把原本在 front 那個元素刪掉
+    return true;
+  }
+}
+```
+
+```
+// 在循環佇列 q 中插入元素，front 指向第一個元素而 rear 指向最後一個元素
+Alogrithm AddQ(item) {
+  rear = (rear + 1) % q.size; //把 rear 往後移一格
+  if(front == rear) then {
+    write("Queue is full!"); //往後移一個之後就碰到 front 代表已經滿了
+    if(front == 0) then rear = n - 1; //這個 if/else 是把剛剛移動的 rear 指針移回到原本的位子
+    else rear = rear - 1;
+    return false;
+  } else {
+    q[rear] = item;
+    return true;
+  }
+}
+
+```
