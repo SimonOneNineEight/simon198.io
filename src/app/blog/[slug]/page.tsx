@@ -25,6 +25,7 @@ const Blog = async ({ params }: Props) => {
 
   const post = sortedPost[postIndex];
   const nextPost = sortedPost[postIndex - 1];
+  const previousPost = sortedPost[postIndex + 1];
 
   if (!post) return <div>Not found</div>;
 
@@ -42,16 +43,29 @@ const Blog = async ({ params }: Props) => {
       </div>
       <Mdx code={post.body.code} />
       <div className="h-[0.2em] bg-neutral-50 dark:bg-neutral-800 mx-2" />
-      {nextPost ? (
-        <Link
-          href={`/blog/${nextPost.slug}`}
-          className="bold flex justify-end mt-4"
-        >
-          下一篇：{nextPost.title}
-        </Link>
-      ) : (
-        ""
-      )}
+      <div className="bold justify-end mt-4">
+        {previousPost ? (
+          <Link
+            href={`/blog/${previousPost.slug}`}
+            className="block text-right"
+          >
+            上一篇：
+            <br />
+            {previousPost.title}
+          </Link>
+        ) : (
+          ""
+        )}
+        {nextPost ? (
+          <Link href={`/blog/${nextPost.slug}`} className="block text-right">
+            下一篇：
+            <br />
+            {nextPost.title}
+          </Link>
+        ) : (
+          ""
+        )}
+      </div>
     </section>
   );
 };
