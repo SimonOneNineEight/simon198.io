@@ -1,0 +1,140 @@
+---
+type: Post
+title: "[Algorithm] Day.7 Dictionaries Part.2 - Priority Queue and Heap"
+description: "Dictionary 是一種抽象的資料結構，他裡面的每一個元素都包含了 **key** 和 **value** 兩個值，且必須要可以支援**加入 (insert)**、**刪除 (delete)**、**搜索 (search)** 這三個動作"
+slug: "priority-queue"
+publishedAt: 2023-03-16
+tags:
+  - algorithm
+  - note
+---
+
+上個部分講到了 Binary Search Tree，介紹了一個好用的搜索方法，今天來介紹另一個可以最大化效能的資料結構
+
+## Pirority Queue
+
+Pirority Queue 是指可以讓我們搜索、插入、刪除最大（或最小）的一種資料結構
+
+會用到的情境可以是當今天我們有一台機器，所有使用這台機器的人都會附一樣的錢，但使用的時間不同。這時為了要最大化我們的收入，我們就必須要設計一種可以快速找到最少使用時間的資料結構，當一個人使用完機器之後就由使用時間最短的補上，這樣就能最大化收益。
+
+同樣的概念，如果沒個人都會在相同的時間內使用完，但每個人付的錢不一樣。這時我們就必須要有一個可以快速找到願意付出最多錢的資料結構來最大化我們的利益
+
+## Heap
+
+Heap 就是一種 Priority Queue 的體現，他的特性是他是一個 complete binary Tree，且分為兩種
+
+1. **Max heap**：所有的 subtree root 都會大於等於他的 children
+2. **Min heap**：所有的 subtree root 都會小於等於他的 children
+
+最後就是 heap 可以被儲存在 array 當中
+
+### Heap Insertion
+
+<Image src="/images/heap/heap-insert.png" alt="heap insertion" />
+
+如上圖，在 Heap 插入元素的步驟就是：
+
+1. 把要插入的元素放到 leaf 的位子
+2. 一步一步跟 parent 比對找到 insert 元素適當的位子
+
+```
+Algorithm Insert(a: array, n: element) {
+  // Insert a[n] into heap which is stored in a[1, n-1]
+  i = n;
+  item = a[n];
+
+  // i/2 是 i 的 parent，參考上圖 `[80,45,70,40,35,50,90]`
+  while((i > 1) and (a[i/2] < item)) { //如果還沒到 root 且 item 比他的 parent 大
+    a[i] = a[i/2]; //把 parent 往下移動一格
+    i = i/2;
+  }
+  a[i] = item; //最後才把 item 直接放到正確的位子
+  return true;
+}
+```
+
+### Heap Deletion
+
+這邊講的刪除通常是講刪除 heap 當中的 root，也就是最大（或最小）值，步驟如下：
+
+1. 把 root 刪掉
+2. 把 heap 中最後一個值放到 root，這樣才可以為持 heap 是 complete binary tree
+3. 把新的 root 調整到對的位子
+
+在講刪除之前，要先講一下如何把 root 調整到對的位子
+
+```
+Algorithm Adjust(a: array, n: root, n: array 的最後一項 ) {
+  // array example: [80, 45, 70, 40, 35, 50, 80]
+
+  j = 2i; //i 的左邊 child
+  item = a[i];
+
+  while(j <= n) { //一路向下找直到最後一項
+    if((j < n) and (a[j] < a[j + 1])) {
+      j = j + 1; //確保 j 是比較大的 child
+    }
+    if(item >= a[j] ){
+      break; //因為 item 已經比他的 child 大了，代表找到 item 的位子
+    }
+    a[j/2] = a[j];
+    j = j/2 //因為 item 還是比 child 小，所以往下找一層
+  }
+
+  a[j/2] = item; //把 item 放到對的地方
+}
+```
+
+知道如何調整之後整個 delete 的演算法就很簡單了！
+
+```
+Algorithm DelMax(a: array, n: array 最後一項, x: 要把 max 存在哪裡) {
+  if(n = 0) {
+    write("heap is empty!");
+    return false;
+  }
+  x = a[1]; //把 max 值存在 x
+  a[1] = a[n]; //把最後一項移到 root
+  Adjust(a, 1, n-1); //調整 root 的位子
+  return true;
+}
+```
+
+### Sort
+
+利用 Heap 的特性，我們可以發現他也可以拿來當作是一個排序的工具，只要把一串數字用 insert 一個一個 insert 進去 heap 裡面之後一個一個 DelMax 之後我們就可以得到一串排列好的數列
+
+```
+Algorithm Sort(a: array, n: array.size) {
+  for (i = 1 to n) {
+    Insert(a, i);
+  }
+  for(i = n to 1){
+    DelMax(a, i, x);
+    a[i] = x;
+  }
+}
+```
+
+這邊因為 Insert 和 DelMax 的時間複雜度都是 O(log n)，所以對 n 個元素作 Insert 和 DelMax 的時間複雜度加總起來就會是 O(2n log n)，當然在分析的時候不會看那個 2，所以就可以說這個 Sort 的演算法時間複雜度是 **O(n log n)**
+
+<Image src="/images/heap/heap-sort.png" alt="Heap Sort" />
+
+### Heapify
+
+雖然說 O(n log n) 的時間複雜度看似不差，但其實 heap 可以做到更快地排序，也就是 Heapify
+
+Heapify 的概念不是利用 insert 和 delete，而是利用到前面所說的 **Adjust**，他把 n 個數字不經排序的塞進樹裡面，之後再從 leaf 的上面一層開始做 **Adjust**
+
+這樣我們就只需要對一半的元素進行操作，並且因為 Adjust 的時間複雜度是 **O(i)**，所以對一半元素進行只需要 **O(1/2n)**，在分析的時候也可以看成是**O(n)**
+
+```
+Algorithm Heapify(a: array, n: array.size) {
+  //Readjust the elements in a[1:n] to form a heap
+  for(i = n/2 to 1) {
+    Adjust(a, i, n)
+  }
+}
+```
+
+<Image src="/images/heap/heapify.png" alt="Heapify" />
