@@ -1,0 +1,114 @@
+---
+type: Post
+title: "[Algorithm] Day.6 Dictionaries Part.1 - Binary Search Tree"
+description: "Dictionary 是一種抽象的資料結構，他裡面的每一個元素都包含了 **key** 和 **value** 兩個值，且必須要可以支援**加入 (insert)**、**刪除 (delete)**、**搜索 (search)** 這三個動作"
+slug: "binary-search-tree"
+publishedAt: 2023-03-15
+tags:
+  - algorithm
+  - note
+---
+
+Dictionary 是一種抽象的資料結構，他裡面的每一個元素都包含了 **key** 和 **value** 兩個值，且必須要可以支援**加入 (insert)**、**刪除 (delete)**、**搜索 (search)** 這三個動作
+
+## Binary Search Tree
+
+一個 Binary Search Tree 如果不是空的，就一定會符合以下幾個條件：
+
+1. 每一個元素的 key 都是不同的
+2. 在 root 左邊的 subtree 裡 key 都比 root 小
+3. 在 root 右邊的 subtree 裡 key 都比 root 大
+4. 左右邊的 subtree 分開來看都是一個獨立的 binary search tree
+
+他的優點是不他不只可以用 key-value 來找想要的元素，也可以用 key 的排行來進行搜索想要的元素
+
+### Search a Binary Search Tree
+
+因為在 Binary Search Tree 右邊一定比左邊大的特性，所以找東西其實只要比對 root 的 key 跟想要搜尋的 key 之後，我們就可以馬上知道下一部該往哪一個方向前進
+
+```
+// Search key x with recursive，要在 tree 中找到 key 為 x 的元素
+Algorithm Search(tree, x) {
+  if(tree = 0) return 0 //樹是空的
+  else if(x = tree -> data) return tree //比對 root 和 x 的 key 值，如果相同代表找到了
+  else if(x < tree -> data) return Search(tree -> leftChild, x) //如果 x 比 root 小，就拿 x 和左邊的 subtree 比較
+  else return Search(tree -> rightChild, x) //如果 x 比 root 大，就拿 x 和右邊的 subtree 比較
+}
+```
+
+```
+// Search the kth-smallest element
+Algorithm SearchK(k) {
+  found = false;
+  t = tree;
+  leftSize = 0;
+  while((t != 0) and not found) {
+    if(k = (t -> leftSize)) found = true;
+    else if(k < (t -> leftSize)) t = t -> leftChild;
+    else {
+      k = k - (t -> leftSize);
+      t = (t -> rightChild)
+    }
+  }
+}
+```
+
+如果要找第 k 小的元素我們就必須在演算法當中加入一個 leftsize 來記錄我們搜尋到哪裡了！
+
+> 大家可以根據上面的線索思考一下上面演算法中 else 裡面的 k = k - (t -> leftSize) 這一行的作用是什麼
+>
+> 答案是：
+> 當我們發現要去右邊的 subtree 中搜尋的時候，就代表已經有 leftSize 個節點小於 k 了，所以我們在右邊的 subtree 裡面就只要在多少 `k - (t -> leftSize )` 個節點就會找到我們要的點
+
+### Insert into a Binary Search Tree
+
+要把元素加入一個 Binary Search Tree 裡面有兩個步驟：
+
+1. 確認要加入的元素 key 值和已經存在的元素沒有重複
+2. 找到適當的位子放那個元素
+
+至於要怎麼找到該放的位子，其實就是 `一層一層找，如果 key > root 就往右，反之就往左，直到找到一個沒有 subtree 的空格就是他該放的位子`
+
+```
+Algorithm Insert(x) {
+  found = false;
+  p = tree;
+
+  //search for x, q is the parent of p
+  while((p != 0) and not found) { // 從上往下一層一層找，一直到 leaf 為止
+    q = p //暫存 p
+    if(x = (p -> data)) found = true;
+    else if(x < (p -> data)) p = (p -> leftChild);
+    else p = (p -> rightChild);
+  }
+
+  //insert
+  if(not found) {
+    p = new TreeNode;
+    (p -> leftChild) = 0;
+    (p -> rightChild) = 0;
+    (p -> data) = x; // 這四行是建立一個新的且沒有 children 的 node x
+    if(tree != 0) {
+      if(x < (q -> data)) {
+        (q -> leftChild) = p;
+      } else {
+        (q -> rightChild) = p;
+      }
+    }
+  }
+}
+```
+
+### Tree deletion
+
+要把 node 從樹裡面刪掉就相對是一件比較簡單的事情了！我們這邊分成兩種情況：
+
+1. 要刪的 node 是 leaf
+
+   因為是最下層，所以他不會影響到其他的 node，所以我們就直接刪掉就可以了
+
+2. 要刪的 node 不是 leaf
+
+   這種情況下我們就需要把要刪掉的 node 所有的 decendant 都連接到原本 node 的 parent 上面，在 Binary search tree 裡面我們則是選擇最大的左側 subtree 或是最小的右側 subtree 作為新的 subtree root
+
+今天主要介紹了 Binary Search Tree 的各種操作，明天會進入到下一部分，也就是 Priority Queue 的部分。
