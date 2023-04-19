@@ -1,6 +1,7 @@
 import Balancer from "react-wrap-balancer";
 import dayjs from "dayjs";
 import Link from "next/link";
+import type { Metadata } from "next";
 
 import { Tags } from "@/components";
 import { Mdx } from "@/components/Mdx";
@@ -16,6 +17,27 @@ export async function generateStaticParams() {
   return sortedPost.map((post) => ({
     slug: post.slug,
   }));
+}
+
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata | undefined> {
+  const post = sortedPost.find((post) => post.slug === params.slug);
+  if (!post) {
+    return;
+  }
+
+  const {
+    title,
+    publishedAt: publishedAt,
+    description: description,
+    slug,
+  } = post;
+
+  return {
+    title,
+    description,
+  };
 }
 
 const Blog = async ({ params }: Props) => {

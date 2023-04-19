@@ -3,7 +3,10 @@ import { Analytics } from "@vercel/analytics/react";
 import Navbar from "../components/Navbar";
 
 export const metadata = {
-  title: "simon198",
+  title: {
+    default: "simon198",
+    template: "%s | simon198",
+  },
   description: "simon198's personal website and blog",
 };
 

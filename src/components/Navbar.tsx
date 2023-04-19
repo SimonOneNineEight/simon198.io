@@ -39,9 +39,15 @@ interface INavItems {
 
 const navItems: INavItems = {
   "/": {
-    name: "blog",
+    name: "home",
     x: 0,
     y: 0,
+    w: "64px",
+  },
+  "/blog": {
+    name: "blog",
+    x: 64,
+    y: 35,
     w: "56px",
   },
 };
