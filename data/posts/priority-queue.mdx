@@ -78,7 +78,7 @@ Algorithm Adjust(a: array, n: root, n: array 的最後一項 ) {
       break; //因為 item 已經比他的 child 大了，代表找到 item 的位子
     }
     a[j/2] = a[j];
-    j = j/2 //因為 item 還是比 child 小，所以往下找一層
+    j = j*2 //因為 item 還是比 child 小，所以往下找一層
   }
 
   a[j/2] = item; //把 item 放到對的地方
