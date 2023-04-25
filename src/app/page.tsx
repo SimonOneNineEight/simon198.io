@@ -16,9 +16,10 @@ export default async function HomePage() {
   return (
     <section>
       <h1 className="font-bold text-3xl font-serif">{name}</h1>
-      <p className="my-5 max-w-[460px] text-neutral-800 dark:text-neutral-200">
-        Hey, this is Simon198. I am a software engineer that is constantly
-        learning new stuffs.
+      <p className="my-5 max-w-[460px] md:max-w-max text-neutral-800 dark:text-neutral-200">
+        {
+          "Hey, this is Simon198. A lazy software engineer that tries to make me a better self everyday."
+        }
       </p>
       <div className="flex items-start md:items-center my-8 flex-col md:flex-row">
         <Image
@@ -37,7 +38,7 @@ export default async function HomePage() {
             className="flex items-center gap-2"
           >
             <TwitterIcon />
-            {`Check out my twitter although I didn't tweet that much`}
+            {`@simon198TW`}
           </a>
           <a
             rel="noopener noreferrer"
@@ -46,7 +47,7 @@ export default async function HomePage() {
             className="flex items-center gap-2"
           >
             <GitHubIcon />
-            {`The place that every software engineer should maintains`}
+            {`@SimonOneNineEight`}
           </a>
           <Link href="/blog" className="flex items-center">
             <ViewsIcon />
@@ -57,7 +58,7 @@ export default async function HomePage() {
       <p className="my-5 max-w-[600px] text-neutral-800 dark:text-neutral-200">
         {/* TODO: need to add some introduction */}
       </p>
-      <ul className="flex flex-col md:flex-row mt-8 space-x-0 md:space-x-4 space-y-2 md:space-y-0 font-sm text-neutral-500 dark:text-neutral-400">
+      {/* <ul className="flex flex-col md:flex-row mt-8 space-x-0 md:space-x-4 space-y-2 md:space-y-0 font-sm text-neutral-500 dark:text-neutral-400">
         <li>
           <a
             className="flex items-center hover:text-neutral-700 dark:hover:text-neutral-200 transition-all"
@@ -69,7 +70,7 @@ export default async function HomePage() {
             <p className="h-7">follow me on twitter</p>
           </a>
         </li>
-        {/* <li>
+        <li>
           <a
             className="flex items-center hover:text-neutral-700 dark:hover:text-neutral-200 transition-all"
             rel="noopener noreferrer"
@@ -79,8 +80,8 @@ export default async function HomePage() {
             <ArrowIcon />
             <p className="h-7">get email updates</p>
           </a>
-        </li> */}
-      </ul>
+        </li>
+      </ul> */}
     </section>
   );
 }
