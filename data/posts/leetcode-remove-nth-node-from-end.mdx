@@ -1,0 +1,106 @@
+---
+type: Post
+title: "[Leetcode] 19. Remove Nth Node From End of List"
+description: "Given the head of a linked list, remove the nth node from the end of the list and return its head."
+slug: "remove-nth-node-from-end"
+publishedAt: 2023-05-21
+tags:
+  - Leetcode
+  - Algorithm
+---
+
+## 題目敘述
+
+Given the `head` of a linked list, remove the `nth` node from the end of the list and return its head.
+
+### Example 1.
+
+<Image
+  src="/images/leetcode/remove-nth-node-from-end/example1.jpeg"
+  alt="example1"
+/>
+
+```
+Input: head = [1,2,3,4,5], n = 2
+Output: [1,2,3,5]
+```
+
+### Example 2.
+
+```
+Input: head = [1], n = 1
+Output: []
+```
+
+### 限制:
+
+The number of nodes in the list is sz.
+
+- `1 <= sz <= 30`
+- `0 <= Node.val <= 100`
+- `1 <= n <= sz`
+
+## 解題思路：
+
+利用 two-pointer 的方式，讓這兩個 pointer 中間間隔 n + 1 個 node，這樣當後面的 pointer 指向最後一個 node 的時候就代表前面 pointer.next 指向的是我們要刪掉的 node。
+
+## 解題步驟：
+
+1. 宣告兩個 pointer 都指向 head（稱為 frontPointer 和 backPointer）
+2. 讓 backPointer 先往後走 n + 1 個 node
+3. 兩個 pointer 同時向後走，走到 backPointer 指向最後一個 node 時停止
+4. 將 frontPointer.next 刪掉
+
+### special case:
+
+當今天要刪掉的 node 是 head 的時候，因為前面沒有 node，所以不能用 `frontPointer.next = frontPointer.next.next` 的方式刪除，就需要用直接設定 `frontPointer = null` 的方式把第一個 node 直接變成 null。  
+而要怎麼判斷是不是刪除 head 的！我就利用 backPointer 往後走的時候紀錄整個 list 的 size，之後如果 frontPointer 依然指向 head 且 n >= size 的時候，我們就知道要刪掉的是 head 了！
+
+## Java 解法
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode frontPointer = head;
+        ListNode backPointer = head;
+        int size = 1;
+
+        /* 把 backPointer 先移動到距離 frontPointer n+1 個 node 的地方 **/
+        for (int i = 0; i < n; i++) {
+            if (backPointer.next != null) {
+                backPointer = backPointer.next;
+                size ++;
+            }
+        }
+
+        /* 同時移動兩個 pointer 直到 backPointer 指向最後一個 node **/
+        while (backPointer.next != null) {
+            frontPointer = frontPointer.next;
+            backPointer = backPointer.next;
+            size ++;
+        }
+
+        /* 處理 special case，也就是要刪除 head 的情況 **/
+        if (frontPointer == head && n >= size) {
+            ListNode temp = frontPointer.next;
+            frontPointer = null;
+            return temp;
+        }
+
+        /* 把 frontPointer aka nth node from end 刪掉**/
+        frontPointer.next = frontPointer.next.next;
+
+        return head;
+    }
+}
+```
