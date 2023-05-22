@@ -43,12 +43,12 @@ The number of nodes in the list is sz.
 
 ## 解題思路：
 
-利用 two-pointer 的方式，讓這兩個 pointer 中間間隔 n + 1 個 node，這樣當後面的 pointer 指向最後一個 node 的時候就代表前面 pointer.next 指向的是我們要刪掉的 node。
+利用 two-pointer 的方式，讓這兩個 pointer 中間間隔 n 個 node，這樣當後面的 pointer 指向最後一個 node 的時候就代表前面 pointer.next 指向的是我們要刪掉的 node。
 
 ## 解題步驟：
 
 1. 宣告兩個 pointer 都指向 head（稱為 frontPointer 和 backPointer）
-2. 讓 backPointer 先往後走 n + 1 個 node
+2. 讓 backPointer 先往後走 n 個 node
 3. 兩個 pointer 同時向後走，走到 backPointer 指向最後一個 node 時停止
 4. 將 frontPointer.next 刪掉
 
@@ -76,7 +76,7 @@ class Solution {
         ListNode backPointer = head;
         int size = 1;
 
-        /* 把 backPointer 先移動到距離 frontPointer n+1 個 node 的地方 **/
+        /* 把 backPointer 先移動到距離 frontPointer n 個 node 的地方 **/
         for (int i = 0; i < n; i++) {
             if (backPointer.next != null) {
                 backPointer = backPointer.next;
