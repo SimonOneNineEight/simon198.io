@@ -1,0 +1,99 @@
+---
+type: Post
+title: "[Leetcode] 328. Odd Even Linked List"
+description: "Given the head of a singly linked list, group all the nodes with odd indices together followed by the nodes with even indices, and return the reordered list."
+slug: "odd-even-linked-list"
+publishedAt: 2023-05-21
+tags:
+  - Leetcode
+  - algorithm
+  - linked list
+---
+
+## 題目敘述
+
+Given the `head` of a singly linked list, group all the nodes with odd indices together followed by the nodes with even indices, and return the reordered list.
+
+The **first node** is considered **odd**, and the **second node** is **even**, and so on.
+
+Note that the relative order inside both the even and odd groups should remain as it was in the input.
+
+You must solve the problem in `O(1)` extra space complexity and `O(n)` time complexity.
+
+### Example 1.
+
+<Image
+  src="/images/leetcode/oddeven-linked-list/example1.jpeg"
+  alt="example1"
+/>
+
+```
+Input: head = [1,2,3,4,5]
+Output: [1,3,5,2,4]
+```
+
+### 限制:
+
+The number of nodes in the list is sz.
+
+- `The number of nodes in the linked list is in the range [0, 104].`
+- `-106 <= Node.val <= 106`
+
+## 解題思路：
+
+把原本的 linked list 拆成 odd linked list 和 even linked list 兩個 linked list，之後再把 even linked list 接在 odd linked list 後面就可以了！
+
+## 解題步驟：
+
+1. 宣告變數 odd 指向第一個 odd node 也就是 head，even 指向第一個 even node 也就是 head.next，以及 even head 來紀錄 even 的起始點以便最後串接
+2. 把第二個 odd node 接在第一個 odd node 後面
+3. 把第二個 even node 接在第一個 even node 後面
+4. 持續前兩個步驟直到最後一個 node，這樣我們就會得到一個只有 odd node 的 linked list 和只有 even node 的 linked list
+5. 把 even linked list 接在 odd linked list 後面（odd.next = evenHead）
+
+### tricky point
+
+我在思考這個解法的時候一開始覺得在 while 迴圈的第一行 **odd.next = odd.next.next** 這邊就會切斷整個 linked list 導致下面那行無法執行。但其實他只是讓 **odd.next 和 even 同時指向 odd.next.next** 而已，並不會造成 linked list 斷掉的問題！
+
+## Java 解法
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null) {
+            return head;
+        }
+
+        ListNode odd = head;
+        ListNode even = head.next;
+        ListNode evenHead = head.next;
+
+        // 這邊在檢查的時候只需要檢查 even，因為 even 一定會接在 odd 後面
+        while(even != null && even.next != null) {
+            odd.next = odd.next.next;
+            even.next = even.next.next;
+            odd = odd.next;
+            even = even.next;
+        }
+
+        odd.next = evenHead;
+
+        return head;
+    }
+}
+```
+
+### Complexity
+
+- Time Complexity: O(n);
+- Space Complexity: O(1);
