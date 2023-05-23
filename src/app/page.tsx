@@ -17,9 +17,7 @@ export default async function HomePage() {
     <section>
       <h1 className="font-bold text-3xl font-serif">{name}</h1>
       <p className="my-5 max-w-[460px] md:max-w-max text-neutral-800 dark:text-neutral-200">
-        {
-          "Hey, this is Simon198. A lazy software engineer that tries to make me a better self everyday."
-        }
+        {"Hey, this is Simon198. A forever learner."}
       </p>
       <div className="flex items-start md:items-center my-8 flex-col md:flex-row">
         <Image
