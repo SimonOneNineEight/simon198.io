@@ -21,7 +21,7 @@ tags:
 
 在下圖中我們就可以看到 G1 和 G2 是 undirect graph 而 G3 則是 direct graph
 
-<Image src="/blog/graph/graph.png" alt="graph" />
+<Image src="/images/graph/graph.png" alt="graph" />
 這邊可以發現 G2 其實就是一棵樹，因為樹就是一種圖的特例
 
 ### 限制
@@ -31,7 +31,7 @@ tags:
 1. 一個圖不能有邊是連回到自己的（不能 self-loop），如下圖(a)中點 1 中的邊
 2. 兩點中間不能有重複的邊，如下圖(b)中點 2,3,4 中間都有重複的邊
 
-<Image src="/blog/graph/restriction.png" alt="restrictions" />
+<Image src="/images/graph/restriction.png" alt="restrictions" />
 
 而基於以上的限制，我們就可以推算出每張圖邊的最大數量，如果是 undirect graph，因為 (u,v) 等於 (v,u)，所以最多只會有 `n(n-1)/2` 個邊，而 direct graph 則因為兩點之間可以存在兩條指向不同的邊，所以最多可以有 `n(n-1)` 條邊。如果一個無向圖有最大數量 n(n-1)/2 條邊，我們就稱它為 `complete graph`
 
@@ -45,10 +45,10 @@ tags:
    1. **in-degree**：在 direct graph 中，一個頂點以他為結束點的邊數量
    2. **out-degree**：在 direct graph 中，一個頂點以他為起始點的邊數量
 3. **Subgraph**：Graph 的某一部分
-   <Image src="/blog/graph/subgraph.png" alt="subgraph" />
+   <Image src="/images/graph/subgraph.png" alt="subgraph" />
 4. **Connected**：如果兩個 vertices 中間有一條 path 就代表這兩點是 connected 的
 5. **Connected Component**：也可以直接叫 **Component**，指的是當今天一個 Graph 的 subgraph 覆蓋到這個 graph 的最大範圍就稱為 Component
-   <Image src="/blog/graph/connected-component.png" alt="component" />
+   <Image src="/images/graph/connected-component.png" alt="component" />
    像上圖兩個都是有包含到 G4 的最大範圍，所以就可以稱為 G4 的 **connected component**，但如果今天只有包含
    `1、2、3` 三個點的話就因為沒有包含最多點所以不是 component
 6. **Strongly Connected**：在 digraph 中，如果兩個點中間有互相連通的邊，就稱為 strongly connected，例如在 `1、2` 中間有 (1,2) 和 (2,1) 兩個邊就稱 1、2 為 strongly connected
@@ -57,7 +57,7 @@ tags:
 
 ### 1. 鄰接矩陣 (Adjacency Matrix)
 
-<Image src="/blog/graph/adjacency-matrix.png" alt="Adjacency Matrix" />
+<Image src="/images/graph/adjacency-matrix.png" alt="Adjacency Matrix" />
 
 如果我們有一個由 n 個 vertices 組成的圖，他的鄰接矩陣就會是一個 **n 列 \* n 行** 的矩陣，矩陣中只會有 **0** 和 **1** 兩種值。若值為 0 則代表兩點之間沒有邊；1 則代表兩點之間有邊
 
@@ -67,7 +67,7 @@ tags:
 
 ### 2. 鄰接串列 (Adjacency List)
 
-<Image src="/blog/graph/adjacency-list.png" alt="Adjacency List" />
+<Image src="/images/graph/adjacency-list.png" alt="Adjacency List" />
 這是利用串列的方式把相鄰的 vertices 連起來，在 head node 的 list 中儲存可以和 head
 node 連接的 vertices，他的優點是可以節省儲存空間
 
@@ -76,7 +76,7 @@ node 連接的 vertices，他的優點是可以節省儲存空間
 如果今天是一個有著 n 個 vertices 和 e 個 edge 的無向圖，那我們可以把它存在一個長度為 `n+2e+1` 的陣列當中
 
 <Image
-  src="/blog/graph/sequential-representation.png"
+  src="/images/graph/sequential-representation.png"
   alt="Sequential Representation"
 />
 
@@ -91,7 +91,7 @@ node 連接的 vertices，他的優點是可以節省儲存空間
 有向圖就相對比較麻煩，因為有方向性的問題，所以除了 adjacency list 以外會需要多存一個 inverse adjacency list，目的是為了要計算每個點的 in-degree
 
 <Image
-  src="/blog/graph/adjacency-list-digraph.png"
+  src="/images/graph/adjacency-list-digraph.png"
   alt="Adjacency List Digraph"
 />
 
@@ -99,17 +99,20 @@ node 連接的 vertices，他的優點是可以節省儲存空間
 
 除了使用 inverse list 以外，還有另外一個方式是把原本的 adjacency list 進行擴充，變成一個 4 欄的 list，分別為 **tail**、**head**、**column link for head**、**column list for tail**
 
-<Image src="/blog/graph/orthorgonal-list.png" alt="orthorgonal list" />
+<Image src="/images/graph/orthorgonal-list.png" alt="orthorgonal list" />
 
 ### 3. 鄰接多串列 (Adjacency Multilist)
 
-<Image src="/blog/graph/adjacency-multilist.png" alt="Adjacency Multilist" />
+<Image src="/images/graph/adjacency-multilist.png" alt="Adjacency Multilist" />
 
 最後就是 Adjacency Multilist 了！上述兩個表示方式都是針對**頂點**進行處理，這個方式則是針對**邊**進行處理
 
 如上圖，我們可以看出 G1 總共有 6 個邊，因此有 N1 到 N6 總共 6 個 list，在這 6 個 list 中個會存五個值，如下
 
-<Image src="/blog/graph/multilist-items.png" alt="Adjacency Multilist Items" />
+<Image
+  src="/images/graph/multilist-items.png"
+  alt="Adjacency Multilist Items"
+/>
 
 利用這個多串列，我們可以看出從第一個邊是 (1,2)，另一個連接到 1 的邊是 N2，跟另一個連接到 2 的邊是 N4 這三個訊息。所以看到 N2 可以知道還有 (1,3)，之後一樣從後面 N3 的後面兩格看出 1 和 3 還有哪些邊會連接。
 
