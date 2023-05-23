@@ -24,8 +24,4 @@ pnpm dev
 
 If you encounter any issues while accessing or using the website, please ensure that you have a stable internet connection and an up-to-date web browser. If problems persist, don't hesitate to reach out to me for assistance.
 
-## License
-
-This personal website is released under the MIT License.
-
 Thank you for visiting my personal website, and I hope you find it informative and engaging!
