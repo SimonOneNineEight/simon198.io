@@ -11,7 +11,9 @@ export const metadata: Metadata = {
 export default async function Home() {
   return (
     <section>
-      <h1 className="font-bold text-3xl font-serif mb-5">Blog</h1>
+      <div className="flex justify-between">
+        <h1 className="font-bold text-3xl font-serif mb-5">Blog</h1>
+      </div>
       {sortedPost.map((post) => (
         <>
           <Link
