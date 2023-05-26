@@ -1,0 +1,193 @@
+---
+type: Post
+title: "[Leetcode] 200. Number of Islands"
+description: "Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands."
+slug: "number-of-islands"
+publishedAt: 2023-05-26
+tags:
+  - Leetcode
+  - algorithm
+  - queue
+---
+
+## 題目敘述
+
+Given an `m x n` 2D binary grid `grid` which represents a map of '1's (land) and '0's (water), return the number of islands.
+
+An **island** is surrounded by water and is formed by connecting adjacent lands **horizontally** or **vertically**. You may assume all four edges of the grid are all surrounded by water.
+
+### Example 1.
+
+```
+Input: grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+Output: 1
+```
+
+### Example 2.
+
+```
+Input: grid = [
+  ["1","1","0","0","0"],
+  ["1","1","0","0","0"],
+  ["0","0","1","0","0"],
+  ["0","0","0","1","1"]
+]
+Output: 3
+```
+
+### 限制:
+
+- `m == grid.length`
+- `n == grid[i].length`
+- `1 <= m, n <= 300`
+- `grid[i][j] is '0' or '1'.`
+
+## 解題思路：
+
+從 grid 的最左上角開始往右往下找，如果遇到陸地（val == "1"）就先檢查他是不是走過，如果沒走過就把他記錄起來，並且把島嶼數量 +1。至於紀錄整個島的方式可以用 Breadth first search 的方式搜索附近的陸地，之後就分為兩種方式，一種是記錄在一個新的 grid 當中，另一種就是直接把探索過的陸地變成水。
+
+利用新的 grid 紀錄的好處是可以不用動到原本的 grid，但就是需要另外宣告一個 grid 來存是不是已經走過了！而如果是用把島弄沉的方式的話就不需要額外的記憶體空間，但壞處就是會破壞原本的 grid。
+
+## 解題步驟：
+
+1. 宣告變數 count
+2. 從 (0,0) 的地方開始往右往下尋找陸地
+
+從第三步驟開始就可以分成兩種方式
+
+### 1. 把島弄沉
+
+3. 找到陸地後，把島嶼數量 + 1，並且把那一格的 "1" 變成 "0"（把陸地變成水），之後對他的上下左右四個方位的格子進行把島弄沉的 function 直到不再是陸地，或者是超出 grid 為止。
+
+### 2. 利用 visited 紀錄
+
+3. 找到陸地後，把島嶼數量 + 1，並且把 visited 當中的那一格記錄成 true，再對他的上下左右四個方位的格子進行搜索並記錄的 function 直到不再是陸地，或者是超出 grid 為止。
+4. return count
+
+## Java 解法
+
+### 1. 把島弄沉
+
+```java
+class Solution {
+    private int rows;
+    private int columns;
+
+    public int numIslands(char[][] grid) {
+        int count = 0;
+        this.rows = grid.length;
+        if (this.rows == 0) return 0;
+        this.columns = grid[0].length;
+
+        for (int i = 0; i < rows; i ++) {
+            for (int j = 0; j < columns; j++) {
+                if (grid[i][j] == '1') {
+                    sinkTheIsland(grid, i, j);
+                    count ++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    public void sinkTheIsland(char[][] grid, int row, int column) {
+        if (row < 0 || column < 0
+          || row >= this.rows || column >= this.columns
+          || grid[row][column] != '1') return;
+
+        grid[row][column] = '0';
+
+        this.sinkTheIsland(grid, row + 1, column);
+        this.sinkTheIsland(grid, row - 1, column);
+        this.sinkTheIsland(grid, row, column + 1);
+        this.sinkTheIsland(grid, row, column - 1);
+    }
+}
+```
+
+### Complexity
+
+- Time Complexity: O(n);
+- Space Complexity: O(1);
+
+### 2. 利用 queue 和新的 grid
+
+```java
+class Solution {
+    private int rows;
+    private int columns;
+    private int[][] visited;
+
+    private class Pair{
+        int first;
+        int second;
+        Pair(int fst,int scnd){
+            this.first=fst;
+            this.second=scnd;
+        }
+    }
+
+    // Function to find the number of islands.
+    public int numIslands(char[][] grid) {
+        this.rows = grid.length;
+        this.columns = grid[0].length;
+        this.visited = new int[this.rows][this.columns];
+
+        if (this.rows == 0) return 0;
+
+        int count = 0;
+        for(int row = 0; row < rows ; row++) {
+            for(int col = 0; col < columns ;col++) {
+                // 如果 visited 是 0 且是陸地的話就是一個新的島嶼
+                if(visited[row][col] == 0 && grid[row][col] == '1') {
+                    count++;
+                    bfs(row, col, grid);
+                }
+            }
+        }
+        return count;
+    }
+
+    private void bfs(int initRow, int initCol, char[][] grid) {
+        visited[initRow][initCol] = 1;
+        Queue<Pair> queue = new LinkedList<Pair>();
+        queue.add(new Pair(initRow, initCol));
+
+        int delRow[] = {-1, 1, 0, 0};
+        int delCol[] = {0, 0, 1, -1};
+
+        while(!queue.isEmpty()) {
+            int row = queue.peek().first;
+            int col = queue.peek().second;
+            queue.remove();
+
+            // 向四個方位尋找陸地
+            for(int i = 0; i < 4; i++){
+                int newRow = row + delRow[i];
+                int newCol = col + delCol[i];
+
+                // 如果是陸地且還 visited 是 0 的話就放入 queue 準備幫他找鄰近陸地
+                if(newRow >= 0 && newRow < this.rows
+                  && newCol >= 0 && newCol < this.columns
+                  && grid[newRow][newCol] == '1'
+                  && this.visited[newRow][newCol] == 0) {
+                    this.visited[newRow][newCol] = 1;
+                    queue.add(new Pair(newRow, newCol));
+                }
+
+            }
+        }
+    }
+}
+```
+
+### Complexity
+
+- Time Complexity: O(n);
+- Space Complexity: O(n);
