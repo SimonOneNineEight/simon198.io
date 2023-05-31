@@ -1,0 +1,128 @@
+---
+type: Post
+title: "[Leetcode] 133. Clone Graph"
+description: "Given a reference of a node in a connected undirected graph. Return a deep copy (clone) of the graph."
+slug: "clone-graph"
+publishedAt: 2023-05-30
+tags:
+  - Leetcode
+  - algorithm
+  - stack
+  - graph
+---
+
+## 題目敘述
+
+Given a reference of a node in a **connected** undirected graph.
+
+Return a **deep copy** (clone) of the graph.
+
+Each node in the graph contains a `value (int)` and a list `(List[Node])` of its neighbors.
+
+```java
+class Node {
+    public int val;
+    public List<Node> neighbors;
+}
+```
+
+### Test case format:
+
+For simplicity, each node's value is the same as the node's index (1-indexed). For example, the first node with `val == 1`, the second node with `val == 2`, and so on. The graph is represented in the test case using an adjacency list.
+
+An **adjacency list** is a collection of unordered **lists** used to represent a finite graph. Each list describes the set of neighbors of a node in the graph.
+
+The given node will always be the first node with `val = 1`. You must return the copy of the given node as a reference to the cloned graph.
+
+### Example 1.
+
+<Image src="/blog/leetcode/clone-graph/example1.png" alt="example1" />{" "}
+
+```
+Input: adjList = [[2,4],[1,3],[2,4],[1,3]]
+Output: [[2,4],[1,3],[2,4],[1,3]]
+Explanation: There are 4 nodes in the graph.
+1st node (val = 1)'s neighbors are 2nd node (val = 2) and 4th node (val = 4).
+2nd node (val = 2)'s neighbors are 1st node (val = 1) and 3rd node (val = 3).
+3rd node (val = 3)'s neighbors are 2nd node (val = 2) and 4th node (val = 4).
+4th node (val = 4)'s neighbors are 1st node (val = 1) and 3rd node (val = 3).
+```
+
+### Example 2.
+
+```
+Input: adjList = [[]]
+Output: [[]]
+Explanation: Note that the input contains one empty list. The graph consists of only one node with val = 1 and it does not have any neighbors.
+```
+
+### Example 3.
+
+```
+Input: adjList = []
+Output: []
+Explanation: This an empty graph, it does not have any nodes.
+```
+
+### 限制:
+
+- `The number of nodes in the graph is in the range [0, 100].`
+- `1 <= Node.val <= 100`
+- `Node.val is unique for each node.`
+- `There are no repeated edges and no self-loops in the graph.`
+- `The Graph is connected and all nodes can be visited starting from the given node.`
+
+## 解題思路：
+
+因為他的目的是深拷貝一個 graph，所以需要做到的每一個 node 都是新的。另外因為需要知道新的 node 所對照的 node 所以要用一個 hash map 把它存起來。
+
+另外在複製的時候，我們選擇使用 **Depth Firth Search** 的方式（也就是先一路走到最底的 node，之後在處理同一層的 node）。從第一個點開始進行複製，在複製第一個點的時候，我們就會需要處理他的 neighbor node，此時因為他的 neighbor node 也還沒建立，所以就會利用遞迴的方式依序建立起所以有的 node，並且把他指派為 neighbor，這樣依序建立起 HashMap 裡面缺乏的 node 到最後全部建立完成也就完成 graph 的深拷貝。
+
+例如： node1 會建立 node2 和 node4（因為 HashMap 裡面沒有）並存到 HashMap 裏面，同時第二 node 會需要 node1 和 node3，而這時因為 HashMap 裡面已經有 node1 所以只需要建立 node3，依此類推直到每個點都建立完畢就會完成整個 graph 的深拷貝。
+
+## 解題步驟：
+
+1. 宣告 HashMap
+2. 複製 head node
+3. 因為 head node 不存在 HashMap 當中，所以複製 head node 並存在 HashMap 當中
+4. 在創造 head node 的 neighbors 的同時，利用遞迴的方式建立其他的 node。
+
+## Java 解法
+
+```java
+class Solution {
+    private HashMap<Integer, Node> oldToNewMap;
+
+    public Node cloneGraph(Node node) {
+        if (node == null) return node;
+
+        // Declare a hashmap that stores the connection between old and new node.
+        this.oldToNewMap = new HashMap<Integer, Node>();
+
+        return this.cloneWithDfs(node);
+    }
+
+    public Node cloneWithDfs(Node node) {
+        // if the new node is already stored in the hashmap, return the new node
+        if (this.oldToNewMap.containsKey(node.val)) {
+            return this.oldToNewMap.get(node.val);
+        }
+
+        // if not created, create a copy of the original node
+        Node copy = new Node(node.val);
+        oldToNewMap.put(node.val, copy);
+
+        // build the neighbors of the new node
+        for (Node neighbor: node.neighbors) {
+            copy.neighbors.add(this.cloneWithDfs(neighbor));
+        }
+
+        return copy;
+    }
+}
+```
+
+### Complexity
+
+- Time Complexity: O(n);
+- Space Complexity: O(n);
