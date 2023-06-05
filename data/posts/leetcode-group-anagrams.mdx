@@ -1,0 +1,158 @@
+---
+type: Post
+title: "[Leetcode] 49. Group Anagrams"
+description: "Given an array of strings strs, group the anagrams together. You can return the answer in any order."
+slug: "group-anagrams"
+publishedAt: 2023-06-04
+tags:
+  - Leetcode
+  - algorithm
+  - hashmap
+  - medium
+---
+
+## 題目敘述
+
+Given an array of strings `strs`, group the **anagrams** together. You can return the answer **in any order**.
+
+An **Anagram** is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+
+### Example 1.
+
+```
+Input: strs = ["eat","tea","tan","ate","nat","bat"]
+Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+```
+
+### Example 2.
+
+```
+Input: strs = [""]
+Output: [[""]]
+```
+
+### Example 3.
+
+```
+Input: strs = ["a"]
+Output: [["a"]]
+```
+
+### 限制:
+
+- `1 <= strs.length <= 104`
+- `0 <= strs[i].length <= 100`
+- `strs[i] consists of lowercase English letters.`
+
+## 解題思路：
+
+這個要把字母組成相同的字串放在同一個 list 當中，之後再把這些組成一個大的 List 之後回傳！
+
+所以主要的難點就會是我們怎麼判斷不同字串是不是有相同的字母組成，以及我們怎麼知道把這些字串暫時存在哪一個位子。
+
+## 解題步驟：
+
+### 我的想法
+
+這邊先附上我自己在寫的想法：
+
+1. 宣告一個 result 的 2-D arrayList，和一個名為 location map 的 HashMap，目的是要存每一個字母組合在 arrayList 中的位置
+2. 利用迴圈對每一個題目給的字串進行以下動作：
+   1. 把拆解成 char 之後裡用 hashMap 儲存這個字串有哪些 char 並且各有幾個
+   2. 把這個 **字串 hashMap** 的 key-value 變成 string (e.g. `a=1b=2`)
+   3. 判斷這個 **字串組成 string** 是否已經存在 location map 當中，如果已經存在就把 加到 result 的相應格子裡
+   4. 如果不存在則在 result 新增一格並把字串存入。
+
+## Java 解法
+
+```java
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String, Integer> locationMap = new HashMap<>();
+        List<List<String>> result = new ArrayList<>();
+        int anagramsCount = -1;
+
+        for (String str: strs) {
+            HashMap<Character, Integer> charCounts = this.countChars(str);
+
+            StringBuilder keyBuilder = new StringBuilder();
+
+            // sort the map by key to make sure anagrams key-value pair will be ordered in the same way
+            charCounts.entrySet()
+                .stream()
+                .sorted(Map.Entry.<Character, Integer>comparingByKey())
+                .forEach(s -> keyBuilder.append(s));
+
+            String key = keyBuilder.toString();
+
+            if (locationMap.containsKey(key)) {
+                result.get(locationMap.get(key)).add(str);
+            } else {
+                anagramsCount++;
+                locationMap.put(key,anagramsCount);
+                ArrayList<String> temp = new ArrayList<>();
+                temp.add(str);
+                result.add(temp);
+            }
+        }
+
+        return result;
+
+    }
+
+    public static HashMap<Character, Integer> countChars(String s) {
+        HashMap<Character, Integer> result = new HashMap<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (result.containsKey(c)) {
+                result.put(c, result.get(c) + 1);
+            } else {
+                result.put(c, 1);
+            }
+        }
+
+        return result;
+    }
+}
+```
+
+### Complexity
+
+- Time Complexity: O(n);
+- Space Complexity: O(n);
+
+## 優化解法
+
+1. 宣告 HashMap，key 為 **排列過後字串**，value 為一個 list 裡面存 **以這些字母組成的字串**
+2. 利用迴圈對每一個題目給的字串進行以下動作：
+   1. 把字串拆成 **字母 array**
+   2. 對 **字母 array** 進行排序
+   3. 檢查 map 裡面有沒有這個 key，如果有就在他的 value 加入字串，沒有就新增一個 key
+
+```java
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String, List<String>> map = new HashMap<>();
+        for (String s1: strs){
+            char[] arr = s1.toCharArray();
+
+            Arrays.sort(arr);
+            String str = new String(arr);
+
+            if (map.containsKey(str)) {
+                map.get(str).add(s1);
+            } else {
+                map.put(str,new ArrayList<>());
+                map.get(str).add(s1);
+            }
+        }
+        return new ArrayList<>(map.values());
+    }
+}
+```
+
+### Complexity
+
+- Time Complexity: O(n);
+- Space Complexity: O(n);
