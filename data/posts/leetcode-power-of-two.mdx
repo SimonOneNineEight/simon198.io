@@ -1,0 +1,90 @@
+---
+type: Post
+title: "[Leetcode] 231. Power of Two"
+description: "Given an integer n, return true if it is a power of two. Otherwise, return false."
+slug: "power-of-two"
+publishedAt: 2023-06-09
+tags:
+  - Leetcode
+  - algorithm
+  - bit manipulation
+  - easy
+---
+
+## 題目敘述
+
+Given an integer `n`, return `true` if it is a power of two. Otherwise, return `false`.
+
+An integer `n` is a power of two, if there exists an integer `x` such that `n == 2^x`.
+
+### Example 1.
+
+```
+Input: n = 1
+Output: true
+Explanation: 2^0 = 1
+```
+
+### Example 2.
+
+```
+Input: n = 16
+Output: true
+Explanation: 2^4 = 16
+```
+
+### Example 2.
+
+```
+Input: n = 3
+Output: false
+```
+
+### 限制:
+
+- `-231 <= n <= 231 - 1`
+
+## 解題思路：
+
+這題其實可以不用 bit manipulation 的方式做，但因為現在在練習這個主題，所以就思考一下這樣的做法。
+
+如果把所有 2 的倍數轉換成二進制的話，我們可以發現他們都是由 1 個 1 和數個 0 組成！
+
+想到這個核心概念之後這個問題就很好解決了，我們就只要把每一個位數都檢查過一次，如果超過 1 個 1 或是沒有 1 的話就代表他不是 2 的倍數。
+
+## 解題步驟：
+
+1. 宣告一個 variable mask 作為我們的判斷每一個位數的依據，和一個 hasOne 來存是不是已經有遇到過 1 了
+2. 利用迴圈從第一位開始對每一個位數進行以下動作：
+   1. 利用 & 1 可以拿到那個位數是 0 還是 2^n 的特性來檢查該位數是不是 0
+   2. 如果不是 0 的話就要檢查這個數字有沒有遇到過 1 了，如果遇到過了就直接 return false，還沒遇過就把 hasOne 改成 true
+   3. 把 mask 往左移一位，以便下一圈檢查的時候有正確的 mask
+3. 如果沒有再迴圈裡面回傳 false 的話，就回傳 true
+
+## Java 解法
+
+```java
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        if (n <= 0) return false;
+
+        int mask = 1;
+        boolean hasOne = false;
+
+        while (mask < n) {
+            if ((n & mask) != 0) {
+                if (hasOne) return false;
+                else hasOne = true;
+            }
+
+            mask <<= 1;
+        }
+        return true;
+    }
+}
+```
+
+### Complexity
+
+- Time Complexity: O(1);
+- Space Complexity: O(1);
