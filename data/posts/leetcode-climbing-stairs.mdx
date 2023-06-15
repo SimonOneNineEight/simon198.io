@@ -1,0 +1,114 @@
+---
+type: Post
+title: "[Leetcode] 70. Climbing Stairs"
+description: "You are climbing a staircase. It takes n steps to reach the top."
+slug: "climbing-stairs"
+publishedAt: 2023-06-14
+tags:
+  - Leetcode
+  - algorithm
+  - recursion
+  - easy
+---
+
+## 題目敘述
+
+You are climbing a staircase. It takes `n` steps to reach the top.
+
+Each time you can either climb `1` or `2` steps. In how many distinct ways can you climb to the top?
+
+### Example 1.
+
+```
+Input: n = 2
+Output: 2
+Explanation: There are two ways to climb to the top.
+1. 1 step + 1 step
+2. 2 steps
+```
+
+### Example 2.
+
+```
+Input: n = 3
+Output: 3
+Explanation: There are three ways to climb to the top.
+1. 1 step + 1 step + 1 step
+2. 1 step + 2 steps
+3. 2 steps + 1 step
+```
+
+### 限制:
+
+- `1 <= n <= 45`
+
+## 解題思路：
+
+這題可以把它想像成是一個 binary tree，而他最上面的 root 就是題目給定的數字 n，而每個 node 會有兩個 children 就是 n - 1 和 n - 2。
+
+這樣我們就只要計算這棵樹總共有幾個 leaf 就會是我們的答案了！
+
+把圖畫出來之後會發現其實 leaf 的 parent 只有兩種也就是 1 和 2，而如果 parent 為 1 的話答案是 1，如果是 2 的話答案是 2。
+
+之後我們就可以用遞迴的方式找到我們要的答案
+
+## 解題步驟：
+
+### 1. Recursion
+
+1. 宣告 base case 也就是 n = 1 的時候 return 1，n = 2 的時候 return 2
+2. recurrence relation 就像是 tree 一樣，一直往他的 children 去找然後把他兩個 children 的 leaf 數量加起來
+
+### Java 解法
+
+```java
+class Solution {
+    public int climbStairs(int n) {
+        if (n <= 2 && n >= 0) return n;
+
+        return climbStairs(n - 1) + climbStairs(n - 2);
+    }
+}
+```
+
+### Complexity
+
+- Time Complexity: O(2^n);
+- Space Complexity: O(1);
+
+這個 recursion 的解答雖然可以找到答案，但我們會發現他的時間複雜度超級無敵差。在 leedcode 上面也會顯示 `Time Limit Exceed`，所以就有下面優化後的解法。
+
+### 2. HashMap + Recursion
+
+1. 宣告一個 hashMap，key 是 step 的數量，而 value 就是那個 step 有種方式可以爬到頂
+2. 把 1 和 2 放入 hashMap 當中。
+3. 呼叫 recursion function，
+   1. recursion function 的 base case 就是當今天在 hashMap 裡面有這個 step 的時候我們就直接回傳他的 value
+   2. recurrence relation 就是當 hashMap 裡沒有的時候，我們就計算這個 step 有幾種組合並放到 hashMap 當中。
+
+### Java 解法
+
+```java
+class Solution {
+    private Map<Integer, Integer> memo;
+
+    public Solution() {
+        this.memo = new HashMap<>();
+        this.memo.put(1,1);
+        this.memo.put(2,2);
+    }
+
+    public int climbStairs(int n) {
+        if (this.memo.containsKey(n)) {
+            return this.memo.get(n);
+        }
+        this.memo.put(n, climbStairs(n - 1) + climbStairs(n - 2));
+        return this.memo.get(n);
+    }
+}
+```
+
+### Complexity
+
+- Time Complexity: O(n);
+- Space Complexity: O(n);
