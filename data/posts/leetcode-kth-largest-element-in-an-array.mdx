@@ -1,0 +1,154 @@
+---
+type: Post
+title: "[Leetcode] 215. Kth Largest Element in an Array"
+description: "Given an integer array nums and an integer k, return the kth largest element in the array."
+slug: "climbing-stairs"
+publishedAt: 2023-06-20
+tags:
+  - Leetcode
+  - algorithm
+  - sorting
+  - medium
+---
+
+## 題目敘述
+
+Given an integer array `nums` and an integer `k`, return the `kth` largest element in the array.
+
+Note that it is the `kth` largest element in the sorted order, not the `kth` distinct element.
+
+You must solve it in `O(n)` time complexity.
+
+### Example 1.
+
+```
+Input: nums = [3,2,1,5,6,4], k = 2
+Output: 5
+```
+
+### Example 2.
+
+```
+Input: nums = [3,2,3,1,2,4,5,5,6], k = 4
+Output: 4
+```
+
+### 限制:
+
+- `1 <= k <= nums.length <= 105`
+- `-104 <= nums[i] <= 104`
+
+## 解題思路：
+
+眾所皆知，一般來說 sorting 會需要花費的時間複雜度是 **O(nlogn)**，但今天題目要求的時間複雜度是 **O(n)**。所以我們就會無法使用平常的 sorting 方法來解這個題目。
+
+這邊我會提供兩種做法，一個是平均時間複雜度是 **O(n)** 但是在 worst case 會做不到的 `Quick Selection`，另外一個則是可以確實的把時間複雜度壓在 **O(n)** 的 `Counting Sort`。
+
+## 1. Quick Selection
+
+Quick Selection 其實和 Quick Sort 一樣都是利用隨機之後分組的方式來找到我們所需要的結果，只是 Quick Sort 做的是排序，而 Quick Selection 則是直接跳過排序去找到我們想要的數字。
+
+他的執行方式就是：
+
+1. 隨機在整個 array 中選一個 value，我們稱為 **pivot**
+2. 把整個 array 中的數值分成三組
+   - **left**: Array 中 value 小於 pivot 的項
+   - **mid**: Array 中 value 等於 pivot 的項
+   - **right**: Array 中 value 大於 pivot 的項
+3. 因為我們是找第 k 大的數字，所以我們需要比較 right 的數量和 k 誰比較大
+   - 如果 `k <= right.size()`，代表我們要找的答案就在 right 裡面（隨機到的數字小於我們要找的數字），所以就對 **right** 這個部分再次進行 Quick Selection
+   - 如果 `k > right.size() + mid.size()`，這就代表其實答案在 left 裡面（隨機到的數字大於我們要找的數字），所以這時候是對 **left** 進行 Quick Selection，但要注意，因為我們刪掉的是比我們要找的 value 更大的項，所以要調整 `k` 變成是 `k - right.size() - mid.size()`
+   - 如果上述兩個情況都不符，就代表我們要找的數字就是那個 **pivot**，所以就直接 `return pivot` 就好了！
+
+### Java 解法
+
+```java
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        // use arraylist to simplify the code
+        List<Integer> list = new ArrayList<>();
+        for (int num: nums) {
+            list.add(num);
+        }
+
+        return quickSelect(list, k);
+    }
+
+    public int quickSelect(List<Integer> nums, int k) {
+        int pivotIndex = new Random().nextInt(nums.size());
+        int pivot = nums.get(pivotIndex);
+
+        List<Integer> left = new ArrayList<>();
+        List<Integer> mid = new ArrayList<>();
+        List<Integer> right = new ArrayList<>();
+
+        for (int num: nums) {
+            if (num > pivot) {
+                right.add(num);
+            } else if (num < pivot) {
+                left.add(num);
+            } else {
+                mid.add(num);
+            }
+        }
+
+        if (k <= right.size()) {
+            return quickSelect(right, k);
+        }
+
+        if (right.size() + mid.size() < k) {
+            return quickSelect(left, k - right.size() - mid.size());
+        }
+
+        return pivot;
+    }
+}
+```
+
+### Complexity
+
+- Time Complexity: O(n^2);
+- Space Complexity: O(n);
+
+## 2. Counting Sort
+
+這個 Sorting 方式和一般利用比較大小進行排序的方法不太一樣。他的做法是先跑過一次整個 array 並 `記錄每一個數字出現了多少次`，之後才建立一個新的 array 把這個紀錄裡面的數字 `從小開始印那個數字出現的次數`之後我們就得到一個排序好的 array。
+
+但其實我們要找的是第 k 大的數字，所以只要有那一個紀錄之後其實不需要排序好的 array，所以我們只需要把 k 從大的開始扣，一直到 `remain <= 0` 的時候看當時是哪個數字就得到答案了！
+
+### Java 解法
+
+```java
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        int minValue = Integer.MAX_VALUE;
+        int maxValue = Integer.MIN_VALUE;
+
+        for (int num: nums) {
+            minValue = Math.min(minValue, num);
+            maxValue = Math.max(maxValue, num);
+        }
+
+        int[] counts = new int[maxValue - minValue + 1];
+        for (int num: nums) {
+            counts[num - minValue] ++;
+        }
+
+
+        int remain = k;
+        int result = maxValue - minValue;
+        while (remain > 0) {
+            remain -= counts[result];
+            if (remain <= 0) return result + minValue;
+            result --;
+        }
+
+        return -1;
+    }
+}
+```
+
+### Complexity
+
+- Time Complexity: O(n);
+- Space Complexity: O(n);
