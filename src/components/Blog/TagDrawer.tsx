@@ -16,9 +16,9 @@ const TagDrawer: React.FC<{
       <div>
         {tags.map((t) => (
           <button
-            className={`bg-neutral-100 dark:bg-neutral-${
-              t.isSelected ? 600 : 800
-            } h-[28px] px-2 m-1 rounded-md z-[-1]`}
+            className={`${t.isSelected ? "bg-neutral-400" : "bg-neutral-200"} 
+            ${t.isSelected ? "dark: bg-neutral-600" : "dark:bg-neutral-800"}
+            h-[28px] px-2 m-1 rounded-md z-[-1]`}
             key={t.label}
             onClick={() => selectTag(t.label)}
           >
