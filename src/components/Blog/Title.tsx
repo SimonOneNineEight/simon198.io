@@ -31,8 +31,8 @@ const Title = () => {
 
   return (
     <>
-      <div className="flex justify-between">
-        <h1 className="font-bold text-3xl font-serif mb-5">Blog</h1>
+      <div className="flex justify-between mb-5">
+        <h1 className="font-bold text-3xl font-serif">Blog</h1>
         <DrawerButton
           isDrawerOpen={isDrawerOpen}
           setDrawerOpen={setDrawerOpen}

@@ -10,7 +10,7 @@ const DrawerButton = ({
   setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   return (
-    <div className="text-center">
+    <div className="text-center flex item-center">
       <button
         type="button"
         onClick={() => setDrawerOpen((previous) => !previous)}
