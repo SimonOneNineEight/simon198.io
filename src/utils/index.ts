@@ -1,3 +1,3 @@
-import renderBlock from "./renderBlock";
+import setBlogsToTagList from "./setBlogsToTagList";
 
-export { renderBlock };
+export { setBlogsToTagList };
