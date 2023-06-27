@@ -1,0 +1,92 @@
+---
+type: Post
+title: "[Leetcode] 206. Reverse Linked List"
+description: "Given the head of a singly linked list, reverse the list, and return the reversed list."
+slug: "reverse-linked-list"
+publishedAt: 2023-06-27
+tags:
+  - Leetcode
+  - algorithm
+  - linked list
+  - easy
+---
+
+## 題目敘述
+
+Given the `head` of a singly linked list, reverse the list, and return the reversed list.
+
+### Example 1.
+
+<Image src="/blog/leetcode/reverse-linked-list/example1.jpg" alt="example1" />
+
+```
+Input: head = [1,2,3,4,5]
+Output: [5,4,3,2,1]
+```
+
+### Example 2.
+
+<Image
+  src="/blog/leetcode/reverse-linked-list/example2.jpeg"
+  alt="example1"
+  height={240}
+  width={240}
+/>
+
+```
+Input: head = [1,2]
+Output: [2,1]
+```
+
+### Example 3.
+
+```
+Input: head = []
+Output: []
+```
+
+### 限制:
+
+- `The number of nodes in the list is the range [0, 5000].`
+- `-5000 <= Node.val <= 5000`
+
+## 解題思路：
+
+核心思路就是要從後往前建立一個 Linked list，實際怎麼操作的方式就是：
+
+就是建立一個兩個 pointer 一個是 `previous` 指向上一個動作的 node，另外一個是 `current` 指向的是這次要把他排在 previous 前面的 node，最後當 `current == null` 代表原本的 linked list 到底了，所以就 `return previous`
+
+## 解題步驟：
+
+1. 宣告變數 `previous`，因為是第一次操作所以沒有上一次操作所以 `previous = null`，以及 `current`，因為第一個目標是 `head` 所以 `current = head`
+2. 在目標是 null 之前執行迴圈：
+   1. 宣告變數 `nextTemp` 暫存 `current.next`
+   2. 把 previous 接在 current 後面，所以 `current.next = previous`
+   3. 完成這一次操作準備往下一次操作前進，所以這次操作變成下一次操作的上一次 `previous = current`，然後目標變成原本目標的下一個所以 `current = nextTemp`
+3. 當 `current == null` 代表原始的 linked list 所有 node 都跑完了，所以就 return previous
+
+## Java 解法
+
+```java
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode previous = null;
+        ListNode current = head;
+
+        while (current != null) {
+            ListNode nextTemp = current.next;
+
+            current.next = previous;
+            previous = current;
+            current = nextTemp;
+        }
+
+        return previous;
+    }
+}
+```
+
+### Complexity
+
+- Time Complexity: O(n);
+- Space Complexity: O(1);
