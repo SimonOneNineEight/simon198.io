@@ -6,3 +6,7 @@ code,
 pre {
   white-space: pre-wrap;
 }
+
+svg {
+  display: inline-block;
+}
