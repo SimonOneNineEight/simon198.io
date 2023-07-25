@@ -1,3 +1,4 @@
+import Head from "next/head";
 import Balancer from "react-wrap-balancer";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -52,43 +53,53 @@ const Blog = async ({ params }: Props) => {
   if (!post) return <div>Not found</div>;
 
   return (
-    <section className="prose dark:prose-invert">
-      <h1 className="font-bold text-3xl font-serif max-w-[650px]">
-        <Balancer>{post.title}</Balancer>
-      </h1>
-      <div className="grid grid-cols-[auto_1fr_auto] items-center mt-4 mb-8 font-mono text-sm max-w-[650px]">
-        <div className="bg-neutral-100 dark:bg-neutral-800 rounded-md px-2 py-1 tracking-tighter">
-          {dayjs(post.publishedAt).format("YYYY-MM-DD")}
+    <>
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
+          integrity="sha384-Xi8rHCmBmhbuyyhbI88391ZKP2dmfnOl4rT9ZfRI7mLTdk1wblIUnrIq35nqwEvC"
+          crossOrigin="anonymous"
+        />
+      </Head>
+      <section className="prose dark:prose-invert">
+        <h1 className="font-bold text-3xl font-serif max-w-[650px]">
+          <Balancer>{post.title}</Balancer>
+        </h1>
+        <div className="grid grid-cols-[auto_1fr_auto] items-center mt-4 mb-8 font-mono text-sm max-w-[650px]">
+          <div className="bg-neutral-100 dark:bg-neutral-800 rounded-md px-2 py-1 tracking-tighter">
+            {dayjs(post.publishedAt).format("YYYY-MM-DD")}
+          </div>
+          <div className="h-[0.2em] bg-neutral-50 dark:bg-neutral-800 mx-2" />
+          {post.tags && <Tags tags={post.tags} />}
         </div>
+        <Mdx code={post.body.code} />
         <div className="h-[0.2em] bg-neutral-50 dark:bg-neutral-800 mx-2" />
-        {post.tags && <Tags tags={post.tags} />}
-      </div>
-      <Mdx code={post.body.code} />
-      <div className="h-[0.2em] bg-neutral-50 dark:bg-neutral-800 mx-2" />
-      <div className="bold justify-end mt-4">
-        {previousPost ? (
-          <Link
-            href={`/blog/${previousPost.slug}`}
-            className="block text-right"
-          >
-            上一篇：
-            <br />
-            {previousPost.title}
-          </Link>
-        ) : (
-          ""
-        )}
-        {nextPost ? (
-          <Link href={`/blog/${nextPost.slug}`} className="block text-right">
-            下一篇：
-            <br />
-            {nextPost.title}
-          </Link>
-        ) : (
-          ""
-        )}
-      </div>
-    </section>
+        <div className="bold justify-end mt-4">
+          {previousPost ? (
+            <Link
+              href={`/blog/${previousPost.slug}`}
+              className="block text-right"
+            >
+              上一篇：
+              <br />
+              {previousPost.title}
+            </Link>
+          ) : (
+            ""
+          )}
+          {nextPost ? (
+            <Link href={`/blog/${nextPost.slug}`} className="block text-right">
+              下一篇：
+              <br />
+              {nextPost.title}
+            </Link>
+          ) : (
+            ""
+          )}
+        </div>
+      </section>
+    </>
   );
 };
 
