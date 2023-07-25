@@ -4,7 +4,6 @@ import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import remarkMath from "remark-math";
-import rehypeKatex from "rehype-katex";
 import rehypeMathjax from "rehype-mathjax";
 
 export const Post = defineDocumentType(() => ({
