@@ -1,0 +1,164 @@
+---
+type: Post
+title: "[Leetcode] 62. Unique Paths"
+description: "There is a robot on an m x n grid. The robot is initially located at the top-left corner."
+slug: "unique-path"
+publishedAt: 2023-09-03
+tags:
+  - Leetcode
+  - algorithm
+  - dynamic programming
+  - medium
+---
+
+## 題目敘述
+
+There is a robot on an `m x n` grid. The robot is initially located at the top-left corner (i.e., `grid[0][0]`). The robot tries to move to the bottom-right corner (i.e., `grid[m - 1][n - 1]`). The robot can only move either down or right at any point in time.
+
+Given the two integers `m` and `n`, return the number of possible unique paths that the robot can take to reach the bottom-right corner.
+
+The test cases are generated so that the answer will be less than or equal to $2 * 10^9$.
+
+### Example 1.
+
+```
+Input: m = 3, n = 2
+Output: 3
+Explanation: From the top-left corner, there are a total of 3 ways to reach the bottom-right corner:
+1. Right -> Down -> Down
+2. Down -> Down -> Right
+3. Down -> Right -> Down
+```
+
+### Example 2.
+
+```
+Input: m = 3, n = 7
+Output: 28
+```
+
+### 限制:
+
+- `1 <= m, n <= 100`
+
+## 解題思路：
+
+因為題目限制我們只能往右和往下走，所以我們可以推論出每一格通往終點的路徑數量都會是他的右邊那格以及下面那格的加總，因此我們要做的就是找出每一格右邊以及下面的格子的路徑，就可以得到最終的答案。
+
+### 1. 暴力解法 (Time Limit Exceeded)
+
+利用遞迴的方式去計算每一格的右邊以及下面格子總共有多少路徑
+
+```java
+class Solution {
+    private int maxRow;
+    private int maxColumn;
+
+    public int uniquePaths(int m, int n) {
+        this.maxRow = m - 1;
+        this.maxColumn = n - 1;
+
+        return this.findPath(0, 0);
+    }
+
+    public int findPath(int row, int column) {
+        // 如果找的是最右下角的那一格，因為只有一種路徑所以回傳 1
+        if (row == maxRow && column == maxColumn) return 1;
+
+        // 如果找的格子超出邊界，回傳 0
+        if (row > maxRow || column > maxColumn) return 0;
+
+        // 回傳那一格的右邊和下面格子路徑數的加總
+        return findPath(row, column + 1) + findPath(row + 1, column);
+    }
+}
+```
+
+### Complexity：
+
+- Time Complexity：$O(2^m*n)$
+- Space Complexity: $O(m + n)$
+
+### 2-D Dynamic programming
+
+從上面的時間複雜度來看就可以知道暴力解法是一個很差的解法，因為他會需要 2 的 m*n 次方的時間才得到答案，今天當我們的 m * n 變大的時候，就會非常的浪費時間。
+
+但同時觀察上面的解法我們可以發現其實我們一直在重複計算相同的格子！所以為了避免這樣的重複計算，我們就會利用到 `Dynamic Programming` 的概念來把曾經計算過的格子儲存下來，這樣下次再遇到就不用重算啦！
+
+另外我們可以發現唯一可以確定有多少路徑的格子只有最右下角那一格！其他格子的路徑其實都會隨的 m 跟 n 的改變而有所不同！
+所以這個利用 Dynamic Programming 最好的方法其實是從右下往左上累加路徑的數量，而不是從左上朝右下找答案
+
+```java
+class Solution {
+    public int uniquePaths(int m, int n) {
+        // 宣告一個 m * n 的 2-D array 來存放每一格的路徑數量
+        int[][] dp = new int[m][n];
+
+        // 從最右下角開始往左上 loop 過每一格個子
+        for (int row = m - 1; row >= 0; row --) {
+            for (int column = n - 1; column >= 0; column --) {
+                // 把最右下角的那格答案設為 1
+                if (row == m - 1 && column == n - 1) dp[row][column] = 1;
+
+                // 如果是最下行，因為沒有下面的格子，所以總路徑數 = 右邊個子的路徑數
+                else if (row == m - 1) dp[row][column] = dp[row][column + 1];
+
+                // 如果是最右行，因為沒有右邊格子，所以總路徑數 = 下面格子的路徑數
+                else if (column == n - 1) dp[row][column] = dp[row + 1][column];
+
+                // 如果不是以上條件就是正常格子，總路徑數 = 右邊格子路徑數 + 下面格子路徑數
+                else dp[row][column] = dp[row][column + 1] + dp[row + 1][column];
+            }
+        }
+
+        // 回傳 [0][0] 也就是起點的總路徑數
+        return dp[0][0];
+    }
+}
+```
+
+### Complexity：
+
+- Time Complexity：$O(m*n)$
+- Space Complexity: $O(m*n)$
+
+### 3. 1-D Dynamic programming
+
+上面的 2-D 的解法其實已經算是把時間複雜度最佳化了！所以要再優化就要朝空間複雜度著手。
+
+如果我們把上面解法的 2-D array 印出來看的話，會發現一個規律，就是最右邊那一行全部都是 1，而且只有在計算上面一行的時候才會用到下面一行的路徑數。
+
+因為上面觀察到的特性，我們可以發現到其實只需要一個 1-D 的 array 就可以記錄我們所需要的資料了！
+
+實際的作法就是因為我們從下而上，從左而右的遍歷這個 grid；而我們又知道最右邊的路徑數量都會等於 1，所以當我們要算這一格的路徑總數時，我們只需要把目前的 index 的路徑數（代表下面那格的路徑數），以及下一個 index 的路徑數（代表右邊那格的路徑數）相加就可以得到了！
+至於為什麼右邊那格會等於這一行的數，而目前所在的 index 還存有上一行的路徑數，就是因為我們是從右到左，所以在這行當中，目前 index 的右邊就會是更新過的也就是目前這一行的，而 index 左邊包含 index 本人的路徑就會是上一行的。
+
+```java
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int[] dp = new int[n];
+
+        // 把已知的最右行都是 1 加到 array 中
+        dp[n - 1] = 1;
+
+        for (int row = m - 1; row >= 0; row --) {
+            // 因為最右行都會是 1，所以從 n - 2 開始遍歷
+            for (int column = n - 2; column >= 0; column --) {
+                /*
+                    因為是從右到左且從下到上遍歷，所以下 + 右可以看成
+                    array 自己 index 的數字（看成下一格的路徑數）
+                    + array 右邊一格的路徑數（看作是右邊那格的路徑數）
+                */
+                dp[column] += dp[column + 1];
+            }
+        }
+
+        return dp[0];
+    }
+}
+```
+
+### Complexity：
+
+- Time Complexity：$O(m*n)$
+- Space Complexity: $O(n)$
