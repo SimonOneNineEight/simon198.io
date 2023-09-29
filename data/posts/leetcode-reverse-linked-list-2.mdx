@@ -1,0 +1,98 @@
+---
+type: Post
+title: "[Leetcode] 92. Reverse Linked List II"
+description: "Reverse the nodes of the list from position left to position right, and return the reversed list."
+slug: "reverse-linked-list-2"
+publishedAt: 2023-09-28
+tags:
+  - Leetcode
+  - algorithm
+  - linked list
+  - medium
+  - English
+---
+
+## Description
+
+Given the `head` of a singly linked list and two integers `left` and `right` where `left <= right`, reverse the nodes of the list from position `left` to position `right`, and return the reversed list.
+
+### Example 1.
+
+<Image
+  src="/blog/leetcode/reverse-linked-list-2/example1.jpeg"
+  alt="example1"
+/>
+
+```
+Input: head = [1,2,3,4,5], left = 2, right = 4
+Output: [1,4,3,2,5]
+```
+
+### Example 2.
+
+```
+Input: head = [5], left = 1, right = 1
+Output: [5]
+```
+
+### Constraints:
+
+- The number of nodes in the list is `n`.
+- `1 <= n <= 500`
+- `-500 <= Node.val <= 500`
+- `1 <= left <= right <= n`
+
+## Thoughts：
+
+This problem shares similarities with Leetcode's "206. Reverse Linked List," However, this problem comes with an additional condition: we are tasked with reversing nodes only within a specified range.
+
+To solve this challenge efficiently, we can divide it into two main tasks:
+
+- Locate the starting node within the range.
+- Reverse the linked list within the specified range.
+
+By accomplishing these steps with precision, we can effectively solve the problem, all while adhering to a concise and structured approach.
+
+### Codes
+
+```python
+class Solution:
+    def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
+        if not head or left == right:
+            return head
+
+        # Create a dummy node to handle the edge case of start reversing from the first node
+        dummy = ListNode(0, head)
+        prev = dummy
+
+        # move the pointer to the starting point
+        for _ in range(left - 1):
+            prev = prev.next
+
+        # Initialize 'current' to the first node to reverse
+        # (will link to the remaining part)
+        current = prev.next
+
+        # reverse the list between left and right
+        for _ in range(right - left):
+            # Store the next node to avoid losing the reference
+            next_node = current.next
+
+            # Reverse the direction of the current node
+            current.next = next_node.next
+
+            # Link the next_node to the remaining reversed part
+            next_node.next = prev.next
+
+            # Update 'prev' to include the reversed node
+            prev.next = next_node
+
+        return dummy.next
+```
+
+### Complexity
+
+- Time Complexity: O(n);  
+  Only traverse the linked list for once
+- Space Complexity: O(1);  
+  Only use 3 variables
