@@ -1,0 +1,159 @@
+---
+type: Post
+title: "[Leetcode] 2038. Remove Colored Pieces if Both Neighbors are the Same Color"
+description: "There are n pieces arranged in a line, and each piece is colored either by 'A' or by 'B'. You are given a string colors of length n where colors[i] is the color of the ith piece."
+slug: "remove-colored-pieces-if-both-neighbors-are-the-same-color"
+publishedAt: 2023-10-02
+tags:
+  - Leetcode
+  - algorithm
+  - greedy
+  - medium
+  - English
+---
+
+## Description
+
+There are `n` pieces arranged in a line, and each piece is colored either by `A` or by `B`. You are given a string `colors` of length `n` where `colors[i]` is the color of the `ith` piece.
+
+Alice and Bob are playing a game where they take alternating turns removing pieces from the line. In this game, Alice moves **first**.
+
+- Alice is only allowed to remove a piece colored `A` if **both its neighbors** are also colored `A`. She is **not allowed** to remove pieces that are colored `B`.
+- Bob is only allowed to remove a piece colored `B` if **both its neighbors** are also colored `B`. He is **not allowed** to remove pieces that are colored `A`.
+- Alice and Bob cannot remove pieces from the edge of the line.
+- If a player **cannot** make a move on their turn, that player loses and the other player wins.
+
+Assuming Alice and Bob play optimally, return `true` if Alice wins, or return `false` if Bob wins.
+
+### Example 1.
+
+```
+Input: colors = "AAABABB"
+Output: true
+
+Explanation:
+AAABABB -> AABABB
+Alice moves first.
+She removes the second 'A' from the left since that is the only 'A' whose neighbors are both 'A'.
+
+Now it's Bob's turn.
+Bob cannot make a move on his turn since there are no 'B's whose neighbors are both 'B'.
+Thus, Alice wins, so return true.
+```
+
+### Example 2.
+
+```
+Input: colors = "AA"
+Output: false
+
+Explanation:
+Alice has her turn first.
+There are only two 'A's and both are on the edge of the line, so she cannot move on her turn.
+Thus, Bob wins, so return false.
+
+```
+
+### Example 3.
+
+```
+Input: colors = "ABBBBBBBAAA"
+Output: false
+
+Explanation:
+ABBBBBBBAAA -> ABBBBBBBAA
+Alice moves first.
+Her only option is to remove the second to last 'A' from the right.
+
+ABBBBBBBAA -> ABBBBBBAA
+Next is Bob's turn.
+He has many options for which 'B' piece to remove. He can pick any.
+
+On Alice's second turn, she has no more pieces that she can remove.
+Thus, Bob wins, so return false.
+```
+
+### Constraints:
+
+- `1 <= colors.length <= 105`
+- `colors consists of only the letters 'A' and 'B'`
+
+## Approach - Brute force：
+
+To crack this problem, consider the colors string:
+
+1. A color can only go if it's flanked by identical colors.
+2. After removal, the string shifts, so rechecking is key for further removals.
+3. Keep going until one color can't be removed anymore
+
+### Codes
+
+```python
+class Solution:
+    # Remove color from colors and return the new colors,
+    # if cannot remove, return empty string
+    def remove_color(is_alice, colors):
+        # Remove "A" in Alice's turns and "B" in Bob's turns
+        color = "A" if is_alice else "B"
+
+        # Iterate through the colors string and find if there are any char has same color with its neighbor
+        for i in range(len(colors) - 2):
+            if colors[i] == color and colors[i + 1] == color and colors[i + 2] == color:
+                # remove the removable char and return the new string
+                return colors[:i+1] + colors[i+2:]
+
+        # if the function doesn't return after the loop,
+        # mean no char is removable, so return empty sting,
+        # which mean the player loses the game
+        return ""
+
+    # Alice starts first
+    is_alice = True
+    # Keep looping until there is a result
+    while True:
+        colors = check_can_remove(is_alice, colors)
+
+        # return the opposite player if get a empty string
+        if not colors:
+            return not is_alice
+
+        # if removed a char, it's next person's turn
+        is_alice = not is_alice
+```
+
+### Complexity
+
+- Time Complexity: $O(n^2)$;  
+   The search method complexity is O(n) in the worst case, and we will need to loop over the entire colors string so we do O(n) search for n time. The complexity will be $O(n^2)$
+
+- Space Complexity: $O(1)$;
+
+### Approach - Count "AAA" and "BBB"
+
+Given that we can only remove a color when it's flanked by two identical colors, it becomes evident that we won't ever eliminate the boundary separating different colors.
+
+By recognizing this, we can simplify our approach: we count how many of each color can be removed and then compare these counts to determine the outcome.
+
+```python
+class Solution:
+    def winnerOfGame(self, colors: str) -> bool:
+        # init the counts to 0
+        a, b = 0, 0
+
+        for i in range(len(colors) - 2):
+            # if there's a removable color, add the count
+            if colors[i] == colors[i+1] == colors[i+2]:
+                if colors[i] == "A":
+                    a += 1
+                else:
+                    b += 1
+
+        # the bigger numbe means they have more element
+        return a > b
+```
+
+### Complexity
+
+- Time Complexity: $O(n)$;  
+   We only iterate the colors string for once to count the number of removable char
+- Space Complexity: $O(1)$;
