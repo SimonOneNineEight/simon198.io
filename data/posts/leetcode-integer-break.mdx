@@ -1,0 +1,95 @@
+---
+type: Post
+title: "[Leetcode] 343. Integer Break"
+description: "Given an integer n, break it into the sum of k positive integers, where k >= 2, and maximize the product of those integers."
+slug: "integer-break"
+publishedAt: 2023-10-06
+tags:
+  - Leetcode
+  - algorithm
+  - dynamic programming
+  - medium
+  - English
+---
+
+## Description
+
+Given an integer `n`, break it into the sum of `k` **positive integers**, where `k >= 2`, and maximize the product of those integers.
+
+Return the **maximum product** you can get.
+
+### Example 1.
+
+```
+Input: n = 2
+Output: 1
+Explanation: 2 = 1 + 1, 1 × 1 = 1.
+```
+
+### Example 2.
+
+```
+Input: n = 10
+Output: 36
+Explanation: 10 = 3 + 3 + 4, 3 × 3 × 4 = 36.
+```
+
+### Constraints:
+
+- `2 <= n <= 58`
+
+## Approach：
+
+We can tell this is a DP problem because we're dealing with numbers from 1 to `n`, and we keep using the same numbers in different ways.
+
+To simplify, we break number n into `i + (n - i)`. Our objective is to find the largest product of `k` numbers, so we decompose it into finding the maximum product of `i` and `(n - i)` numbers. Essentially, we break it down into `i * max product of (n - i)` for each i in the equation. This approach allows us to tackle the problem methodically and ultimately obtain the maximum product we're aiming for
+
+First, we try different ways to use each number:
+
+- Multiply it directly.
+- Split it into smaller parts and find the max product of those parts.
+
+But after trying to break numbers into smaller ones a bunch of times, we realize it's not efficient. So instead of breaking numbers down, we flip our approach and start building numbers up from 1.
+
+While doing this, we notice that for `n <= 3`, breaking them down doesn't get us a bigger product than the original number. So we handle these small cases as exceptions. In our dynamic programming array, we just put those numbers as they are.
+
+After dealing with the exceptions, we start going through the array from **4** onwards to figure out the max product of breaking down numbers.
+
+We start with n as the answer, then check from 2 to n. If `i * dp[n - i]` is bigger than what we have so far, we update the answer. Eventually, we'll have the max product by working through the array.
+
+By building up the dynamic programming array starting from 4, we eventually hit our target number n in the array. At that point, we simply return `dp[n]` to get our answer.
+
+### Codes
+
+```python
+class Solution:
+    def integerBreak(self, n: int) -> int:
+        # handle edge cases
+        if n <= 3:
+            return n - 1
+
+        dp = [0] * (n + 1)
+
+        # dp base case
+        for i in [1, 2, 3]:
+            dp[i] = i
+
+        # build the dp array form 4
+        for num in range(4, n + 1):
+            ans = num
+            #  we can treat num as i * best product, so we iterate through 2 to num to find the best product.
+            for i in range(2, num):
+                ans = max(ans, i * dp[num - i])
+
+            dp[num] = ans
+
+
+        return dp[n]
+```
+
+### Complexity
+
+- Time Complexity: $O(n^2)$;  
+  We build the dp array, and repeatly access every integer for almost n times
+- Space Complexity: $O(n)$
+  The space is for the dp array we built
