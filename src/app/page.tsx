@@ -6,6 +6,7 @@ import {
   GitHubIcon,
   TwitterIcon,
   ViewsIcon,
+  LinkedInIcon,
 } from "@/components/icons";
 
 export const revalidate = 60;
@@ -33,7 +34,7 @@ export default async function HomePage() {
             rel="noopener noreferrer"
             target="_blank"
             href="https://twitter.com/simon198TW"
-            className="flex items-center gap-2"
+            className="flex items-center gap-1"
           >
             <TwitterIcon />
             {`@simon198TW`}
@@ -47,22 +48,34 @@ export default async function HomePage() {
             <GitHubIcon />
             {`@SimonOneNineEight`}
           </a>
-          <Link href="/blog" className="flex items-center">
-            <ViewsIcon />
-            {`Welcome to my blog page and see what I've learned`}
+          <Link
+            href="https://www.linkedin.com/in/simon198/"
+            className="flex items-center "
+          >
+            <LinkedInIcon />
+            {`@Simon (Cheng-Wei) Huang `}
           </Link>
         </div>
       </div>
       <p className="my-5 max-w-[600px] text-neutral-800 dark:text-neutral-200">
         {/* TODO: need to add some introduction */}
+
         {
-          "我是Simon198，一個大學念經濟卻意外觸碰到寫程式所以半路出家的軟體工程師。曾經擔任過前端工程師，目前正準備要前往美國東北大學唸碩士，期望可以在美國撈到很多桶金XD。"
+          "Hello, I'm Simon, a Master’s student in Information Systems at Northeastern University. I have a strong background in front-end web development because of my experience in a dental startup in Taiwan. I helped build digital solutions like patient reservation system, profile management, and clinic ledger tools, etc. to boost clinic operation efficiency."
         }
         <br />
         <br />
         {
-          "這個網站主要會作為我在這一路上學到的各種東西的紀錄，希望可以讓和我走相似道路的人可以有一個參考，有任何疑問也歡迎直接 DM 我，我會熱情地回答你的!"
+          "Currently, I'm enhancing my skills not only from school but also by working on both front-end and back-end development with a startup company, where I’ve created React interfaces ,backend APIs, and Firebase database from scratch."
         }
+        <br />
+        <br />
+        {
+          "My passion for technology is driven by a deep-seated desire to help people and make a tangible impact on the world. I believe that the right software can transform lives by solving real-world problems, enhancing everyday experiences, and opening new avenues for innovation. With every line of code, I aspire to contribute to creating a better world, one program at a time."
+        }
+        <br />
+        <br />
+        {"Send me a DM through X or Github to get in touch!!!"}
       </p>
       {/* <ul className="flex flex-col md:flex-row mt-8 space-x-0 md:space-x-4 space-y-2 md:space-y-0 font-sm text-neutral-500 dark:text-neutral-400">
         <li>
