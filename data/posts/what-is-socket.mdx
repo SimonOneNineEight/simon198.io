@@ -1,0 +1,85 @@
+---
+type: Post
+title: "[Note] What is a Socket"
+description: "This is the first note I took when creating a http server with c, I'm curious about why people always create and connect to a socket server in the beginning, so this is my note after studying socket basics"
+slug: "whet-is-socket"
+publishedAt: 2022-08-10
+tags:
+  - socket 
+  - note
+  - network
+---
+I am currently creating an HTTP server using C because I want to learn more about this language. Also, I have been a web developer for the past few years, so I chose this project to create and would like to experience a pleasant work and learn journey. However, when I encountered something unusal at the very beginning of creating this project, which is `why everyone creates a socket as their first line of code when they are creating HTTP server with c`. The question pops up because I never did that before when I was using express.js to create backend servers. At that moment, I rea,ized this project was worth doing, so let's find out what a socket is. 
+
+## Network Socket
+There are many types of sockets accross industries, network socket, hardware socket, WebSocket etc. Today, we are going to focus on network socket, which are the one we usually refer to when saying socket in the software industry. 
+
+A socket is an endpoint for two machines to communicate and exchange data over a network. In the context of HTTP server, it is used to listen for incoming connections from client (e.g. web browser) to send or receive data between server and clients.
+
+## Key Concepts
+#### 1. IP Address and Port Number:
+A socket is identified by a combination of an IP address and a port number.
+
+- Example: If we want to connect to a web server, we might connect to IP address `192.168.1.1` on port `80` (the default port for HTTP)
+
+#### 2. Client-Server Modal:
+- **Client**:
+The client is the machine or application that initiates the connection. It sends requests to the server.
+- **Server**:
+The server is the machine or application that waits for incoming connections on a specific socket and responds to client request.
+
+#### 3. Socket Lifecycle:
+1. **Creating a Socket**: The server creates a socket and binds it to a specific address and port number.
+2. **Listening**: The server listens for incoming connection requests from clients on the socket.
+3. **Connecting**: The client creates its socket and connects to the server's socket.
+4. **Data Exchange**: Once the connection is established, data can be sent and received through the socket.
+5. **Closing the Socket**: After the communication is complete, both the client and the server close their sockets to free up resources.
+
+#### 4. Listening Socket and Connection Socket:
+- Listening Socket (or Server Socket)
+  - **Purpose**: This socket is created when the server starts, and it is used solely to listen for incoming connection requests from clients.
+  - **Behavior**: It remains open and active for the entire duration that the server is running. It does not close after handling a client request because its job is to continuously listen for new connection attempts.
+
+- Connection Socket (or Per-Client Socket)
+  - **Purpose**: This socket is created temporarily to handle communication with a specific client. It is created when the server accepts an incoming connection from a client using the listening socket.
+  - **Behavior**: Each client connection results in a new connection socket, which is closed after the communication is complete.
+
+## Type of Network Sockets
+### TCP Socket
+- **Description**: TCP (Transmission Control Protocol) is a connection-oriented protocal that provides reliable, ordered, and error-checked delivery of data.
+- **Characteristics**:
+  - Establishes a connection before data is exchanged.
+  - Ensures data arrives in the same order it was sent.
+  - Handles retransmissions of lost packets.
+- **Use Case**: Web servers (HTTP/HTTPS), email servers, file transfers, SSH servers. 
+
+### UDP Socket Servers
+- **Description**: UDP (User Datagram Protocol) is a connectionless protocal that provides faster, but less reliable, communication compared to TCP.
+- **Characteristics**:
+  - No connections is established before sending data.
+  - Data may arrive out of order, and packets can be lost without being retransmitted.
+  - Lower overhead and latency compared to TCP.
+- **Use Cases**: DNS servers, video streaming, online gaming, Voice over IP servers.
+
+## WebSocket
+Before I started this project, WebSocket was the only socket that I was familiar with, I used `socket.io` multiple times in my other projects to help create long-term connection between client and server. However, I realized that I never really understood what is under the hood, and I believe this should be a great opportunity to reveal the secret. 
+
+### What is WebSocket
+WebSocket is a communication protocol that provides two-way (full-duplex) communication channels over a single, long-lived TCP connection. It was designed to enable real-time communications between a clients and a servers, allowing both parties to send and receive messages at any time without the overhead of repeatedly establishing new connections.
+
+### WebSocket vs TCP socket
+WebSocket operates on top of the TCP protocol, which means that while WebSocket itself is a higher-level protocol designed for specific use cases, it relies on the underlying TCP protocol to manage the connection and ensure reliable data transmission.
+
+### WebSocket vs UDP socket
+We know that UDP and WebSocket have similar use cases, such as video games, live video, but what are the key differences between these two.
+
+1. **Reliability**: Because WebSocket is a built on top of TCP, it inherents the reliable characteristics of the protocol, which guarantees the connection receives data in correct order without loss or duplication.
+
+2. **Connection Management**: Websocket establishes a persistent, full-duplex connection between the client and server after an initial HTTP handshake. UDP, on the other hand, does not maintain a connection and sends data without ensuring that it is received.
+
+3. **Overhead**: Websocket relies on TCP, it has more overhead due to the need for connection setup, maintenance, and ensuring reliable delivery. However, UDP's lack of connection management and error correction means it has very low overhead, making it faster and more efficient for transmitting volumes of data quickly.
+
+In Summary, we will choose Websocket if we want a more reliable connection, and choose UDP if we focus on speed more than the reliability.
+
+## Outro
+After gaining a better understanding of socket, I now understand what sockets are. Additionally, I realized that in higer-level languages and libraries, many basic features are implemented by the language or library itself, and user might not even know the existance of them. Therefore, this reinfored my desire to learn more about lower level languages and get deeper understanding of programming.
