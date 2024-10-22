@@ -1,0 +1,137 @@
+---
+type: Post
+title: "[Note] Cloud Computing Learning No.1 - Linux Command"
+description: ""
+slug: "linux-command"
+publishedAt: 2024-10-21
+tags:
+  - Cloud Computing
+  - note
+  - Linux
+---
+## Intro
+I am recently taking cloud computing course in my master's degree journey, and this is something professor taught in the first lecture. Let's take some note about interesting commands that I'm not familiar with.
+
+### Network
+#### SCP (Secure Copy)
+- **Description**: SCP is used to securely copy files between networks and hosts.
+- **Syntax**: scp user@src_host:/path user@remote_host:/path
+- **Use Case**:
+    - Securely tranfer data between local and remote machine
+    - Automaticaly backup
+
+#### Telnet
+- **Description**: Telnet is a protocol used to connect to remote computer using TCP/IP network.
+- **Syntax**: telnet [hostname][port] 
+- **Use Case**:
+    - Access remote server (less secure than SSH)
+
+### System Information
+#### df
+- **Description**: Display the amount of disk space available on file system.
+- **Syntax**: df [options]
+- **Examples**:
+    - Basic usage: df
+    - Human-readable format: df -h
+
+### Filters
+#### more
+- **Description**: View file content one page at a time
+- **Syntax**: more [file...]
+- **Use Case**:
+    - Paging through long files or command outputs
+
+#### less
+- **Description**: Similiar to more, but can move both forward and backward
+- **Syntax**: less [file...]
+- **Use Case**:
+    - Interactive paging with advanced navigation features
+
+#### head
+- **Description**: Outputs the first part of files
+- **Syntax**: head [options] [file...]
+- **Examples**:
+    - Display the first 10 lines: head logfile.txt
+    - Display the first 20 lines: head -n 20 logfile.txt
+- **Use Case**:
+    - Preview the beginning of files
+
+#### head
+- **Description**: Outputs the last part of files
+- **Syntax**: tail [options] [file...]
+- **Examples**:
+    - Display the last 10 lines: tail logfile.txt
+    - Display the last 20 lines: tail -n 20 logfile.txt
+    - Following a file (live updates): tail -f logfile.txt
+- **Use Case**:
+    - Monitoring log files in real-time
+
+### Speical Characters
+#### | (Pipe)
+- **Description**: Connects the output of one command to the input of another command.
+- **Syntax**: command1 | command2
+- **Examples**:
+    - Count lines in a file: cat file.txt | wc -l
+
+
+#### > (Redirect Output)
+- **Description**: Redirects the output of a command to a file, overwriting the file if it exists.
+- **Syntax**: command > file 
+- **Examples**:
+    - Save command output to a file: ls > filelist.txt
+
+#### >> (Append Output)
+- **Description**: Appends the output of a command to the end of a file.
+- **Syntax**: command >> file 
+- **Examples**:
+    - Append command output to a file: echo "Hello World!" > filelist.txt
+
+#### < (Redirect Input)
+- **Description**: Redirects input from a file to a command
+- **Syntax**: command < file 
+- **Examples**:
+    - Use file as input for a command: sort < unsorted.txt
+
+#### 2>&1 (Redirect Error to Output)
+- **Description**: Redirects standard error (file descriptor 2) to the same as standard output (file descriptor1).
+- **Syntax**: command > file 2>&1
+- **Examples**:
+    - Combine output and error in a single file: command > output.log 2>&1
+
+#### $! (Last Background Process ID)
+- **Description**: Returns the process ID (PID) of the most recently executed background command
+- **Syntax**: $!
+- **Examples**:
+    - Get PID of the last background job: echo $!
+
+### Service Management
+#### systemctl
+- **Description**: Manages systemd services and the system state
+- **Syntax**: systemctl [command][service]
+- **Examples**:
+    - Start Apache web serve: systemctl start apache2
+    - Check status of SSH service: systemctl status ssh
+
+
+#### service
+- **Description**: Manages SysVinit services. Work on systems using SysVinit or compatible init system.
+- **Syntax**: sercice [service] [command]
+- **Examples**:
+    - Start a service: service service-name start
+
+#### kill
+- **Description**: Sends signals to processes, usually to terminate them.
+- **Syntax**: kill [signal] PID
+- **Common Signals**:
+    - Terminate: kill PID
+    - Forceful terminate: kill -9 PID
+    - List signals: kill -l
+
+
+#### pkill
+- **Description**: Sends signals to processes based on name or other attributes.
+- **Syntax**: pkill [options] name
+- **Common Signals**:
+    - Terminate: pkill process-name
+    - Forceful terminate: pkill -9 process-name
+    - Search by user: pkill -u username process-name
