@@ -1,0 +1,234 @@
+---
+type: Post
+title: "[Note] Cloud Computing Learning No.1 - Computer Network"
+description: ""
+slug: "computer-network-1"
+publishedAt: 2024-10-22
+tags:
+  - Cloud Computing
+  - note
+  - Computer Network
+---
+
+## What is a Computer Network?
+
+A computer network is a collection of interconnected devices that communicate with each other to share resouces, data, and services. The devices in a network are connected through transmission media, which can be wired or wireless.
+
+In a network, communication between devices is governed by protocols, such as `TCP/IP`, which ensure that data is transmitted reliably and securely across different devices.
+
+### Components of a Computer Network
+
+- **Devices**: Computers, smartphones, servers, routers, etc.
+- **Networking hardware**: Routers, switches, hubs, modems.
+- **Transmission media**: Cables or wireless singals (Wi-Fi, radio waves).
+- **Protocols**: Rules that govern the communication between devices (e.g. TCP/IP, HTTP, FTP)
+
+### Types of Networks:
+
+- **LAN (Local Area Network)**: A network that covers a small geographic area like home, office, or building.
+- **WAN (Wide Area Network)**: A network that covers a large geographic area, often a country or continent, like the internet.
+- **PAN (Personal Area Network)**: A short-range networkd for personal devices, such as Bluetooth connection.
+- **MAN (Metropolitan Area Network)**: A network that spans a city or large campus.
+
+## Network Topology
+
+`Network Topology` refers to the physical or logical arrangement of devices( nodes) and the connections (links) between them in a network. It defines how different devices are interconnected and how data flows between them. Network topology plays a critical role int the performance, scalability, and reliability of a network.
+
+#### Two types of topologies:
+
+1. **Physical Topology**: Describe how the devices are physically connected.
+2. **Logical Topology**: Describes how data flows within the network, regardless of the physical design.
+
+## Common Types of Network Topologies:
+
+#### 1. Bus Topology:
+
+- **Description**: All devices are connected to a single central cable (the bus). Data is transmitted from one node and travales along the bus until it reaches the destination node.
+
+- **Advantages**:
+
+  - Simple to install and use.
+  - Cost-effective for small network.
+
+- **Disadvantages**:
+  - Limited by the number of devices and distance.
+  - A failure in the central cable can bring down the entire network.
+  - Data collisions can occur if two devices try to send data simultancously.
+- **Use Cases**: Small, low-cost networks.
+
+#### 2. Star Topology:
+
+- **Description**: All devices are connected to a single central cable (the bus). Data is transmitted from one node and travales along the bus until it reaches the destination node.
+
+- **Advantages**:
+
+  - Easy to install and manage.
+  - Failure of single device does not affect the rest of the network.
+  - Good performance, as the hub directs data efficiently.
+
+- **Disadvantages**:
+  - If the central hub or switch fails, the entire network goes down.
+  - More cable is required compared to bus topology, increaing costs.
+- **Use Cases**: Commonly used in home, office, and LANs.
+
+#### 3. Ring Topology:
+
+- **Description**: Each device is connected to two other devices, forming a circular (ring) network. Data travels in one direction (or in both in a dual ring) around the ring until it reaches its destination.
+
+- **Advantages**:
+
+  - Data travels in a predictable manner, reducing the chance of collisions.
+  - Eazy to install and troubleshoot.
+
+- **Disadvantages**:
+  - Failure of a single device or connection can disrupt the entire network.
+  - Performance degrades as more devices are added to the network
+- **Use Cases**: FDDI (Fiber Distributed Data Interface) networks, some industrial control networks.
+
+#### 4. Mesh Topology:
+
+- **Description**: Each device is connected to every other device in the network. This can be a full mesh (where every device is directly connected) or a partial mesh (where only some devices are connected to each other).
+
+- **Advantages**:
+
+  - High fault tolerance -- if one connection fails, data can take another route.
+  - Provide high performance and reliability.
+
+- **Disadvantages**:
+  - Expensive and complex to set up.
+  - Requires a lot of cabling, leading to high costs.
+- **Use Cases**: High-reliability networks like military communication systems, large WANs, and the internet.
+
+#### 5. Tree Topology:
+
+- **Description**: Tree topology is a combination of star and bus topologies. Devices are grouped into star-shaped clusters, and thoese clusters are connected in a bus-like fashion. There's usually a root node (central hub), and all other devices are connected to it hierarchically.
+
+- **Advantages**:
+
+  - Eazy to expand by adding more star-shaped clusters.
+  - Centralized control and management.
+
+- **Disadvantages**:
+  - If the backbone fails, entire sections of the network can be affected.
+  - Maintenance and configuration can be complex due to the hierarchical structure.
+- **Use Cases**: Large networks like university or corporate campuses, where sub-networks are connected to a central backbone.
+
+## OSI Model
+The **OSI Model (Open Systems Intrconnection Model)** is a conceptual framework used to understand and standardize the functions of a communivation system or network. The OSI model divides a communication system into 7 different layers, with each layer having a specific role and interactiong with the layers directly above and below it. This layered architecture helps network engineers and developers troubleshoot, design and understand how data is transmitted over network.
+
+### The 7 Layers of the OSI Model:
+#### 1. Physical Layer (Layer 1):
+- **Function**: Responsible for the physical connection between devices, and the transmission and recertion of raw bitstreams (0s and 1s) over a physical medium (e.g. cables, radio waves).
+- **Examples**: Ethernet cables, fiber optics, hubs, and network adapters.
+- **Key Tasks**:
+    - Data encoding and transmission.
+    - Bit synchronization.
+    - Medium type (wired or wireless) and signal processing.
+
+#### 2. Data Link Layer (Layer 2):
+- **Function**: Provides reliable data transfer across the physical layer by detecting and possibly correcting errors that occur at the physical layer. It also handles MAC (Media Access Control) addresses for device-to-device communication within the same network.
+- **Examples**: Switches, MAC addresses, Ethernet, Wi-Fi
+- **Key Tasks**:
+    - Frame creation and detection.
+    - Error detection and correction.
+    - Flow control between devices.
+
+#### 3. Network Layer (Layer 3):
+- **Function**: Manages logical addressing and routing so that data packets can be sent across multiple networks. It determines the best physical path for data to travel from the source to the destination across different devices and networks.
+- **Examples**: Routers, IP addresses (IPv4, IPv6).
+- **Key Tasks**:
+    - Routing of data packets (using routing protocols like OSPF, BGP).
+    - Logical addressing (IP addressing).
+    - Packet forwarding and handling.
+
+#### 4. Transport Layer (Layer 4):
+- **Function**: Ensures complete data transfer by providing reliable or unreliable delivery. It handles error correction, segmentation, flow control, and multiplexing. This layer is crucial for end-to-end communication between devices. 
+- **Examples**: TCP, UDP
+- **Key Tasks**:
+    - Reliable communication using error recovery and acknowledgment (TCP).
+    - Unreliable, low-latency communication without acknowledgments (UDP).
+    - Segmentation and reassembly of data packets.
+
+#### 5. Session Layer (Layer 5):
+- **Function**: Establishes, manages, and terminates sessions between applications on different devices. It handles session checkpoints and recovery, ensuring that the communication remains synchronized.
+
+- **Examples**: NetBIOS, RPC (Remote Procedure Call), PPTP (Point-to-Point Tunneling Protocol).
+
+- Key Tasks:
+    - Session initiation and termination.
+    - Session checkpointing and recovery.
+    - Synchronization between communicating devices. 
+
+#### 6. Presentation Layer (Layer 6):
+- **Function**: This layer is responsible for data translation, encryption, decryption, and data compression. It ensures that the data sent from the application layer of one system is readable by the application layer of another system.
+- **Examples**: SSL/TLS (for encryption), JPEG, GIF, ASCII and EBCDIC.
+- **Key Tasks**:
+    - Data formatting and encoding.
+    - Data encryption and decryption.
+    - Data compression and decompression.
+
+#### 7. Application Layer (Layer 7):
+- **Function**: This layer interacts irectly with end-user applications and provides network services to applications. It enables services like email, web browsing, etc. The application layer is where the user's software interacts with the network.
+
+- **Examples**: HTTP, FTP, SMTP, DNS, SNMP
+- **Key Task**:
+    - Provide network services to end-user applications.
+    - Handling high-level protocols for specific applications.
+    - Interacting with software applications to initiate and manage data exchange.
+
+### Why is OSI Model Important:
+1. **Standardization**: The OSI model provices a standardized framework for different networking technologies to interact and work together.
+2. **Troubleshooting**: By breaking down network communication into layers, it's easier to diagnose and fix network issues. Problems can be isolated to specific layers, allowing for quicker resolution.
+3. **Interperability**: It promotes interoperability between products from different manufacturers, ensuring that devices and systems can communicate over a network, regardless of their internal architecture.
+4. **Scalability**: The model helps in designing scalable networks. Each layer can be modified or upgraded independently without affecting other layers.
+
+## TCP/IP Model
+The `TCP/IP Model` is a conceptual framework that standardizes the way data is transmitted and received over the internet. It defines how data should be packetized, addressed, transmitted, routed, and received at the destination. The TCP/IP model is the foundation of modern networking and the internet.
+
+### Layers of the TCP/IP Model:
+#### 1. Network Interface (Link) Layer:
+- **Equivalent to OSI Layers**: Combines the OSI `Physical` and `Data Link` layers.
+- **Function**: Handles the physical transmission of data over the network medium. It deals with how data is sent as frames between devices on the same network and how hardware addresses are used to identify devices on the local network.
+- **Protocols**: Ethernet, Wi-Fi, ARP, etc.
+- **Key Tasks**:
+    - Frame creation and transmission over local network.
+    - Error detection at the physical level.
+    - Mapping IP addresses to MAC addresses using ARP.
+
+#### 2. Internet Layer:
+- **Equivalent to OSI Layer**: Network Layer.
+- **Function**: Responsible for routing data packets across different networks. The internet layer ensures that data is transmitted across network boundaries and handles logical addressing (IP addresses).
+- **Protocols**: IP, ICMP (Internet Control Message Protocols), ARP (Address Resolution Protocol), IGMP (Internet Group Managemsnt Protocol).
+- **Key Tasks**:
+    - Logical addressing (assigning IP address).
+    - Routing of packets across multiple network using routers.
+    - Fragmentation and reassembly of packets.
+    - Error reporting (e.g. using ICMP).
+
+#### 3. Transport Layer:
+- **Equivalent to OSI Layer**: Transport Layer.
+- **Function**: Proides reliable or unreliable delivery of data between devices. It ensures end-to-end communication and manages data flow, error detection, and correction. There are two primary protocols used:
+    - **TCP (Transmission Control Protocol)**: Ensures reliable, connection-oriented communication with features like error checking, data acknowledgment, and reteansmission of lost packets.
+    - **UPD (User Datagram Protocol)**: Provides fast, connectionless communication but does not guarantee reliable delivery or data integrity. It's used for time-sensitive application where speed is more critical than reliability.
+- **Protocals**: TCP, UDP.
+- **Key Tasks**:
+    - Establishing and terminating connections.
+    - Error dectection and correction (in TCP).
+    - Flow control (in TCP).
+    - Multiplexing of data from multiple applications.
+
+#### 4. Application Layer:
+- **Equivalent to OSI Layer**: Combines the OSI `Application`, `Presentation`, and `Session` layers.
+- **Function**: Handles high-level protocols and services that allow user applications to communicate over the network. This layer provides the interface between network services and end-user applications. It is reponsible for formatting data, managing sessions, and enabling the proper delivery of services like web browsing, email and file transfer.
+- **Protocols**: HTTP, FTP, SMTP, DNS, SNMP, SSH, etc.
+- **Key Tasks**:
+    - Providing user-fasing network services (e.g. email, file transfer, web browsing)
+    - Handling data formatting, encryption, and decryption.
+    - Managing application-layer connection (e.g. managing multiple HTTP connections).
+
+### Key Difference Between OSI Model and TCP/IP Model
+1. OSI Model has 7 layer, and TCP/IP Model has only 4.
+2. OSI Model is designed as a theoretical framework, and TCP/IP Model is developed based on practical implementation.
+3. OSI Model doesn't specify protocols at each layer, and TCP/IP Model does.
+4. OSI Model uses a top-down approach, which starting with the higher level to ensure user's applications work before worrying about lower-level protocols. TCP/IP Model uses a bottom-up approach, starting with the network and moving up to ensure data can be transferred efficiently before handling user applications.
+5. Layers are more independent in OSI Model compare to TCP/IP Model.
