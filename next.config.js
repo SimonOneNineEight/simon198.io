@@ -2,18 +2,13 @@ const { withContentlayer } = require("next-contentlayer");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
+    // Only ignore during builds for production deployment
+    ignoreDuringBuilds: process.env.NODE_ENV === 'production',
   },
   typescript: {
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    ignoreBuildErrors: true,
+    // Only ignore type errors during production builds
+    ignoreBuildErrors: process.env.NODE_ENV === 'production',
   },
 };
 

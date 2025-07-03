@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useMDXComponent } from "next-contentlayer/hooks";
 
-const CustomLink = (props) => {
+const CustomLink = (props: any) => {
   const href = props.href;
 
   if (href.startsWith("/")) {
@@ -21,7 +21,7 @@ const CustomLink = (props) => {
   return <a target="_blank" rel="noopener noreferrer" {...props} />;
 };
 
-function RoundedImage({ src, alt, width, height, ...props }) {
+function RoundedImage({ src, alt, width, height, ...props }: { src: string; alt: string; width?: number; height?: number; [key: string]: any }) {
   return (
     <Image
       src={src}
@@ -34,7 +34,7 @@ function RoundedImage({ src, alt, width, height, ...props }) {
   );
 }
 
-function Callout(props) {
+function Callout(props: { emoji: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="flex bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-4 my-8">
       <div className="flex items-center w-4 mr-4">{props.emoji}</div>
@@ -43,12 +43,12 @@ function Callout(props) {
   );
 }
 
-function ProsCard({ title, pros }) {
+function ProsCard({ title, pros }: { title: string; pros: string[] }) {
   return (
     <div className="border border-emerald-200 dark:border-emerald-900 bg-neutral-50 dark:bg-neutral-900 rounded-xl p-6 my-4 w-full">
       <span>{`You might use ${title} if...`}</span>
       <div className="mt-4">
-        {pros.map((pro) => (
+        {pros.map((pro: string) => (
           <div key={pro} className="flex font-medium items-baseline mb-2">
             <div className="h-4 w-4 mr-2">
               <svg className="h-4 w-4 text-emerald-500" viewBox="0 0 24 24">
@@ -72,12 +72,12 @@ function ProsCard({ title, pros }) {
   );
 }
 
-function ConsCard({ title, cons }) {
+function ConsCard({ title, cons }: { title: string; cons: string[] }) {
   return (
     <div className="border border-red-200 dark:border-red-900 bg-neutral-50 dark:bg-neutral-900 rounded-xl p-6 my-6 w-full">
       <span>{`You might not use ${title} if...`}</span>
       <div className="mt-4">
-        {cons.map((con) => (
+        {cons.map((con: string) => (
           <div key={con} className="flex font-medium items-baseline mb-2">
             <div className="h-4 w-4 mr-2">
               <svg
