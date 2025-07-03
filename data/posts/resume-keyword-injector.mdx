@@ -1,0 +1,178 @@
+---
+type: Post
+title: "[Project] I Built a Tool to Fight ATS Filtering (And Why That's Problematic)"
+description: "After applying for over 300 internship positions in 9 months with only handful passing resume screening, I started questioning everything. So I built a tool that adds invisible keywords to PDF resumes to help with ATS filtering—and discovered why that's more problematic than I initially thought."
+slug: "resume-keyword-injector"
+publishedAt: 2025-07-01
+tags:
+  - python
+  - project
+  - job search
+  - pdf
+---
+
+After applying for over 300 internship positions in 9 months with only handful passing resume screening, I started questioning everything.
+Was my resume really that terrible? I'm an honest job seeker -- I only applied to positions where I had at least 70% of the required skills.
+Yet the rejection rate was brutal.
+
+That's when I started suspecting the real culprit: ATS filtering. Maybe it wasn't about my qualifications at all.
+Maybe it was because I wrote `React.js` instead of `ReactJS`, or `Database` instead of `DB`.
+Small differences in the keywords that had nothing to do with my actual abilities,
+but everything to do with getting filtered out before a human ever saw my resume.
+
+## The Problem Deep Dive
+
+So I decided to dig deeper. If my suspicion was right maybe the problem wasn't my qualifications
+--it was how ATS systems were interpreting my resume.
+
+### Learning How ATS Really Works
+
+I started researching how these systems actually function, and what I discovered was both enlightening and concerning.
+98.4% of Fortune 500 companies use ATS to manage their hiring process.
+These systems don't read resumes the way humans do.
+Instead, they convert your carefully formatted PDF into plain text and run it through keyword matching algorithms.
+
+The process seemed straightforward enough: the system takes the job description, identifies key terms, then searches your resume for matches.
+Your resume gets assigned a relevance score based on how many keywords it contains and how closely they match the original job posting.
+Simple string matching, not intelligent understanding.
+
+### The Keyword Variation Problem
+
+This is where I started to see potential issues. Through online ATS testing tools and developer forums,
+I learned that these systems can be quite literal in their matching:
+
+- A job posting asking for `React.js` might not recognize `ReactJS` or `React` as the same thing.
+- `JavaScript` vs `JS` could be treated as different technologies.
+- `PostgreSQL` vs `Postgres` - potentially different databases to an algorithm
+
+Look at my own resume, I had listed `TypeScript, JavaScript` and `React, Next.js` - but what if a job description used `TypeScript/JavaScript` or `React.js`?
+Would the ATS recognize these as matches?
+
+I tested this theory using some free ATS scanning tools online with different keyword variations.
+The result is that seemingly minor differences in terminology could impact match scores.
+
+### Why This Affects Everyone
+
+The scope of this problem was bigger than I expected.
+88% of employers believe they are losing out on highly qualified candidates who are screened out by ATS systems.
+
+#### For job seekers:
+
+We might have exactly the right experience but get filtered out because we used different terminology than what the algorithm expected.
+
+#### For employers:
+
+They exclude viable candidates whose resumes do not match the criteria but who could perform at a high level.
+
+#### For the industry:
+
+We're optimizing for keyword matching rather than actual capability assessment.
+
+### My Hypothesis
+
+Based on this research, I developed a theory:
+many qualified job seekers weren't getting rejected because they were unqualified
+--they were getting rejected because of keyword mismatches that no human would consider meaningful.
+
+The solution seemed clear: if ATS systems were looking for specific keyword matches, maybe there was a way to help bridge the gap.
+Not by misrepresenting skills, but by ensuring genuine qualifications were presented in the terminology these systems expected to find.
+
+That's when I started thinking about building a tool to address this keyword matching problem.
+
+## My Solution
+
+If the system is broken, can I work around it?
+This is my first thought after understanding how ATS systems worked.
+As a developer, my instinct was to build something.
+
+The idea was simple:
+put invisible keywords in my resume so that ATS systems could see them, but human recruiters would see the same clean, professional document.
+This would help me pass the initial screening and get my resume in front of actual people.
+
+I thought carefully about this approach. I wasn't trying to create a tool to deceive anyone,
+but rather to ensure my real qualifications were visible to both machines and humans.
+If I wasn't actually qualified for a job, this tool wouldn't help me get hired—
+it would just get me to the interview stage where my actual skills would be evaluated.
+
+### The Technical Journey
+
+I will always think about the input and output of a product.
+For input, I initially set it as a markdown file because my own resume is written in markdown.
+However, after some research, I found that not a lot of people write their resume in markdown format,
+so I decide to set the input as a PDF file, since most people export their resume to a PDF format when they upload to an application.
+And for output, it will have to be a PDF file because users will be able to directly upload it to the application website.
+
+### How to Hide Text
+
+I discovered several ways to make text invisible. The most straightforward way is to put white text on a white background.
+I also found I could make text so small so it became invisible to the naked eye,
+or place keywords in document margins where they wouldn't interfere with the layout.
+
+Rather than betting on a single method,
+I decided to implement five different techniques.
+This would give users flexibility and increase the chances of success across different ATS systems.
+
+### Building the Tool
+
+The development process involved solving several technical challenges.
+Originally I extracted all the text from the input PDF and then write it into a new file after adding the keywords.
+This approach has a big problem, it doesn't preserve the style and the format of the original PDF. Although the output text is correct,
+it looks completely different to what we want it to be. So I decided to add a overlay to the input file instead.
+After adopting the new approach, I successfully added the keywords to the resume while preserving the style and format.
+
+Another important decision was the user interface approach: interactive prompts versus direct command execution.
+I like the feeling of `npx next init` which will prompt me all the options I need for the project,
+and also like the `curl` one line command that includes all the arguments in the command and get everything done in a single line.
+So I made both exist, when users type only `resume-keyword-injector` or with some arguments, it will enter interactive mode and prompt users to enter necessary information.
+But if users give me all the arguments, we will directly run the command without extra prompting.
+
+With this hybrid approach, users will have a lot more flexibility to choose which way they like.
+
+As I built out the functionality, I added comprehensive error handling so the tool would fail gracefully rather than corrupting someone's resume.
+I added progress indicators and clear feedback messages so users would understand what was happening. I wrote detailed documentation with examples.
+
+The final version could process any PDF resume, add keywords using five different invisible methods,
+and handle everything from single resumes to batch processing.
+It included safeguards to prevent common mistakes and provided helpful error messages when things went wrong.
+
+After the development and testing, I had a working solution to keyword matching problem.
+The technical challenge was solved, but I was beginning to understand that building the tool was just the first step in a much larger conversation.
+
+## The Ethical Considerations and Reality Check
+
+After I completed the tool, I did more research about this topic before publishing the tool.
+What I discovered gave me pause.
+
+It turns out that keyword injection is an old trick, and most recruiters are aware of it.
+The problem is that it's often misused by people who use these technique to stuff skills they don't actually have into resumes, then show up to the interview completely unprepared.
+This has created a negative perception of any resume optimization techniques.
+
+### The Real Risk
+
+I had to be honest about what could go wrong. Modern ATS systems are getting better at detecting hidden text manipulation.
+Some companies specifically screen for these tactics and automatically reject resumes that use them.
+Even if you make it past the ATS, there's a chance a recruiter might discover the hidden keywords when copying and pasting sections of your resume.
+
+More importantly, this approach doesn't solve the fundamental problem--it's just a workaround for broken systems.
+If everyone starts using these techniques, companies will likely develop better detection methods, and we'll be back where we started.
+
+### Finding the Middle Ground
+
+I kept coming back to what I saw as an important distinction: there's a difference between adding keywords for skills you actually have versus skills you don't.
+If someone has `React` experience but the ATS is looking for `React.js`, that seems like a reasonable translation problem to solve.
+
+But I also realized that good intentions don't prevent misuse. The tool could easily be used to add fake skills, regardless of my recommendations.
+
+Despite these concerns, I still decided to release the tool, but with clear warnings about the risks and strong recommendations about responsible use.
+The reality is that this isn't a perfect solution, it's a band-aid for a larger problem. But for job seekers who are genuinely qualified and just need to get past the initial keyword matching,
+it might help level the playing field, at least temporarily.
+
+## Conclusion
+
+This has been a great learning experience, even if the outcome wasn't as straightforward as I initially hoped.
+I discovered the current problem and tried hard to come up with a solution, I enjoy the process of crafting something that really smooths out my workflow, and maybe others' too.
+I am glad that I can publish my first software on PyPI, even though it might not be the best tool.
+For anyone considering using resume-keyword-injector: please don't use it to deceive recruiters. Only add keywords for skills you genuinely possess.
+Also, understand the risk that having an invisible section might cause your resume being automatically rejected or flagged, in some company it will put you on a black list.
+This tool hasn't been proven effective against all ATS systems, so use it at your own discretion and risk.
+I will keep using it in some of my applications to AB test if it works or not, and will share the result in future blog posts. See you then~
