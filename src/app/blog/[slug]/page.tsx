@@ -1,4 +1,3 @@
-import Head from "next/head";
 import Balancer from "react-wrap-balancer";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -54,14 +53,6 @@ const Blog = async ({ params }: Props) => {
 
   return (
     <>
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
-          integrity="sha384-Xi8rHCmBmhbuyyhbI88391ZKP2dmfnOl4rT9ZfRI7mLTdk1wblIUnrIq35nqwEvC"
-          crossOrigin="anonymous"
-        />
-      </Head>
       <section className="prose dark:prose-invert">
         <h1 className="font-bold text-3xl font-serif max-w-[650px]">
           <Balancer>{post.title}</Balancer>
@@ -73,7 +64,7 @@ const Blog = async ({ params }: Props) => {
           <div className="h-[0.2em] bg-neutral-50 dark:bg-neutral-800 mx-2" />
           {post.tags && <Tags tags={post.tags} />}
         </div>
-        <Mdx code={post.body.code} />
+        <Mdx code={post.body} />
         <div className="h-[0.2em] bg-neutral-50 dark:bg-neutral-800 mx-2" />
         <div className="bold justify-end mt-4">
           {previousPost ? (

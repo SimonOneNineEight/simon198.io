@@ -3,7 +3,7 @@ type: Post
 title: "[Algorithm] Day.1 演算法基本介紹 Part.1"
 description: "最近開始在北科大的隨班附讀！發現上課之後如果不複習一下好像沒辦法，所以就決定把上課筆記整理起來，希望可以藉此更熟悉上課內容 XDD"
 slug: "algorithm-introduction"
-publishedAt: 2023-03-05
+publishedAt: "2023-03-05"
 tags:
   - algorithm
   - note
@@ -45,11 +45,11 @@ tags:
 
 ```
   Algorithm TowerOfHanoi(圓盤數量, 起始杆, 目標杆子, 剩餘第三根杆子) {
-	  if(圓盤數量 >= 1) then {
+    if(圓盤數量 >= 1) then {
       TowersOfHanoi(圓盤數量 - 1, 起始杆子, 剩餘第三根杆子, 目標杆子);
       write ("把", 起始杆子, 最上面的圓盤移動到" , 目標杆子 , "最上面");
       TowersOfHanoi(圓盤數量 - 1, 剩餘第三根竿子, 目標杆子, 起始杆子);
-	  }
+    }
 }
 ```
 

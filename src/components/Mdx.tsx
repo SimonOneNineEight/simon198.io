@@ -1,7 +1,7 @@
 import * as React from "react";
+import { useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useMDXComponent } from "next-contentlayer/hooks";
 
 const CustomLink = (props: any) => {
   const href = props.href;
@@ -110,11 +110,17 @@ interface MdxProps {
 }
 
 export function Mdx({ code }: MdxProps) {
-  const Component = useMDXComponent(code);
+  const Component = useMemo(() => {
+    // Velite outputs compiled MDX as JavaScript code string
+    // We need to evaluate it to get the React component
+    const runtime = require('react/jsx-runtime');
+    const fn = new Function('arguments', code);
+    return fn([runtime]).default;
+  }, [code]);
 
   return (
     <article className="prose prose-quoteless prose-neutral dark:prose-invert">
-      <Component components={{ ...components }} />
+      <Component components={components} />
     </article>
   );
 }

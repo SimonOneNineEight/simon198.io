@@ -1,5 +1,5 @@
 import { ITagListObject } from "@/interfaces";
-import { Post } from "contentlayer/generated";
+import { Post } from "contentlayer2/generated";
 
 const setBlogsToTagList = (posts: Post[]): ITagListObject[] => {
   const tagList: string[] = [];

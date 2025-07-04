@@ -1,7 +1,7 @@
-import { allPosts } from "contentlayer/generated";
+import { posts } from "#site/content";
 import dayjs from "dayjs";
 
-export const sortedPost = allPosts
+export const sortedPost = posts
   .filter((p) => p.publishedAt)
   .sort((a, b) => {
     return dayjs(a.publishedAt).isAfter(b.publishedAt) ? -1 : 1;
