@@ -11,7 +11,7 @@ const posts = defineCollection({
   schema: s
     .object({
       type: s.string().optional(),
-      slug: s.path(),
+      slug: s.slug(),
       title: s.string().max(99),
       description: s.string().optional(),
       publishedAt: s.union([s.isodate(), s.string(), s.null()]).optional(),
@@ -34,8 +34,7 @@ const posts = defineCollection({
 
       return {
         ...data,
-        slug: data.slug.replace(/^posts\//, ''),
-        path: `/posts/${data.slug.replace(/^posts\//, '')}`,
+        path: `/posts/${data.slug}`,
         publishedAt,
       };
     })
