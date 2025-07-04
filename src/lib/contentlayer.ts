@@ -1,8 +1,6 @@
-import { posts } from "#site/content";
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
+import { posts } from '#site/content';
 
 export const sortedPost = posts
-  .filter((p) => p.publishedAt)
-  .sort((a, b) => {
-    return dayjs(a.publishedAt).isAfter(b.publishedAt) ? -1 : 1;
-  });
+    .filter((p) => p.publishedAt)
+    .sort((a, b) => (dayjs(a.publishedAt).isAfter(b.publishedAt) ? -1 : 1));

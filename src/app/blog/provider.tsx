@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import { createContext, ReactNode, useContext, useState } from "react";
-import { ITagListObject } from "@/interfaces";
+import {
+    createContext, ReactNode, useState, useMemo,
+} from 'react';
+import { ITagListObject } from '@/interfaces';
 
 interface IBlogContext {
   tags: ITagListObject[];
@@ -9,16 +11,18 @@ interface IBlogContext {
 }
 
 export const BlogContext = createContext<IBlogContext>({
-  tags: [],
-  setTags: () => {},
+    tags: [],
+    setTags: () => {},
 });
 
 export function BlogProvider({ children }: { children: ReactNode }) {
-  const [tags, setTags] = useState<ITagListObject[]>([]);
+    const [tags, setTags] = useState<ITagListObject[]>([]);
 
-  return (
-    <BlogContext.Provider value={{ tags, setTags }}>
-      {children}
-    </BlogContext.Provider>
-  );
+    const value = useMemo(() => ({ tags, setTags }), [tags]);
+
+    return (
+        <BlogContext.Provider value={value}>
+            {children}
+        </BlogContext.Provider>
+    );
 }

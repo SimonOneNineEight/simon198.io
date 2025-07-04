@@ -1,3 +1,3 @@
-import setBlogsToTagList from "./setBlogsToTagList";
+import setBlogsToTagList from './setBlogsToTagList';
 
 export { setBlogsToTagList };
