@@ -5,7 +5,7 @@ const setBlogsToTagList = (posts: Post[]): ITagListObject[] => {
   const tagList: string[] = [];
   posts.forEach((post) => {
     const tags = post.tags;
-    for (let tag of tags) {
+    for (const tag of tags) {
       if (!tagList.includes(tag)) {
         tagList.push(tag);
       }

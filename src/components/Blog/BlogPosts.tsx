@@ -9,7 +9,6 @@ import { BlogContext } from "@/app/blog/provider";
 const BlogPosts = () => {
   const { tags } = useContext(BlogContext);
   const [displayPosts, setDisplayPosts] = useState(sortedPost);
-  console.log("sortedPost: ", sortedPost);
 
   useEffect(() => {
     const displayTags = tags.filter((t) => t.isSelected).map((t) => t.label);
@@ -17,7 +16,7 @@ const BlogPosts = () => {
     else {
       setDisplayPosts(
         sortedPost.filter((p) => {
-          for (let tag of p.tags) {
+          for (const tag of p.tags) {
             if (displayTags.includes(tag)) return true;
           }
           return false;
